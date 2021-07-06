@@ -1,21 +1,11 @@
-.view {
+.room__view {
   width: 100vw;
   height: 84vh;
   position: relative;
   overflow: contain;
 }
-body {
-  margin: 0;
-}
-.demo {
-  display: flex;
-  width: 300px;
-  height: 300px;
-  background: green;
-  margin: 10px;
-}
 
-.participantsContainer {
+.room__videoGrid {
   display: grid;
   height: 100%;
   width: 100%;
@@ -41,11 +31,11 @@ body {
   grid-template-rows: 50% 50%;
 }
 
-.twoContainer {
+.room__gridItem {
   flex-grow: 1;
 }
 
-.videoWrapper {
+.room__videoWrapper {
   position: absolute;
   bottom: 20px;
   right: 20px;
@@ -53,7 +43,7 @@ body {
   height: 225px;
 }
 
-.emptyRoom {
+.room__empty {
   height: 100%;
   display: flex;
   align-items: center;

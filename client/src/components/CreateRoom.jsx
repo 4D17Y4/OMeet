@@ -12,19 +12,19 @@ function CreateRoom() {
     useContext(SocketContext);
 
   return (
-    <div className="">
+    <div className="view">
       <Header />
-      <Grid container className="createRoomContainer">
-        <Grid item md={6} className="gridItem">
-          <div className="userVideoContainer">
-            <div className="wrapper">
+      <Grid container className="createRoom">
+        <Grid item md={6} className="createRoom__item">
+          <div className="createRoom__userPreview">
+            <div className="userPreview__wrapper">
               <UserVideo showButtons={true} />
             </div>
           </div>
         </Grid>
-        <Grid item md={6} className="gridItem">
-          <div className="optionsContainer">
-            <div className="options">
+        <Grid item md={6} className="createRoom__item">
+          <div className="createRoom__form">
+            <div className="form__wrapper">
               <TextField
                 label="Name"
                 value={name}
@@ -38,7 +38,7 @@ function CreateRoom() {
                 onChange={(e) => setRoomID(e.target.value)}
                 fullWidth
               />
-              <div className="buttonContainer">
+              <div className="form__submit">
                 <Link
                   to={{
                     pathname: `/room/${roomID}`,

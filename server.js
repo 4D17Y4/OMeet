@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
    * - audioState (current audio state of the user)
    */
   socket.on("join room", (payload) => {
-    console.log(payload);
+    // check if room is already present.
     if (users[payload.roomID]) {
       const length = users[payload.roomID].length;
 
@@ -41,6 +41,8 @@ io.on("connection", (socket) => {
         audioState: payload.audioState,
       });
     } else {
+      // room not present init room.
+
       users[payload.roomID] = [
         {
           userName: payload.name,
@@ -51,16 +53,25 @@ io.on("connection", (socket) => {
       ];
     }
     socketToRoom[socket.id] = payload.roomID;
+
     const usersInThisRoom = users[payload.roomID].filter(
       (user) => user.id !== socket.id
     );
 
+    // get all room participants to the user joined.
     socket.emit("all users", usersInThisRoom);
   });
 
+  /**
+   * sending joined users signal.
+   * @param {payload}
+   * - signal (user signal)
+   * - callerID (user Id)
+   * - name (user name)
+   * - videoState (user current video state)
+   * - audioState (user current audio state)
+   */
   socket.on("sending signal", (payload) => {
-    console.log(payload);
-    console.log(payload.name);
     io.to(payload.userToSignal).emit("user joined", {
       signal: payload.signal,
       callerID: payload.callerID,
@@ -70,6 +81,11 @@ io.on("connection", (socket) => {
     });
   });
 
+  /**
+   * returning the signal to complete shakehand.
+   * @param {payload}
+   * - signal (user signal)
+   */
   socket.on("returning signal", (payload) => {
     io.to(payload.callerID).emit("receiving returned signal", {
       signal: payload.signal,
@@ -77,22 +93,23 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("get Stream", (stream) => {
-    console.log("stream");
-    console.log(stream);
-  });
+  /**
+   * on user stream updated
+   * @param {payload}
+   * - roomId (room Id of the user stream)
+   * - videoState (updated video state)
+   * - audioState (updated audio state)
+   */
   socket.on("user updated", (payload) => {
-    // console.log(stream);
-    console.log(payload.stream);
-    const usersInThisRoom = users[payload.roomId].filter(
-      (user) => user.id !== socket.id
-    );
+    // update the user attributes in user list.
     for (var i = 0; i < users[payload.roomId].length; i++) {
       if (socket.id === users[payload.roomId][i].id) {
         users[payload.roomId][i].videoState = payload.videoEnabled;
         users[payload.roomId][i].audioState = payload.audioEnabled;
       }
     }
+
+    // broadcast user stream update.
     socket.broadcast.emit("update user stream", {
       videoEnabled: payload.videoEnabled,
       audioEnabled: payload.audioEnabled,
@@ -100,9 +117,15 @@ io.on("connection", (socket) => {
     });
   });
 
+  /**
+   * Handle user disconnect
+   */
   socket.on("disconnect", () => {
     const roomID = socketToRoom[socket.id];
+    // getRoom.
     let room = users[roomID];
+
+    // remove user from room.
     if (room) {
       room = room.filter((user) => user.id !== socket.id);
       users[roomID] = room;
@@ -111,6 +134,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// server listen.
 server.listen(process.env.PORT || 8000, () =>
   console.log("server is running on port 8000")
 );

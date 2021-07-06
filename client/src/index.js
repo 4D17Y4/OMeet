@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+
+// for socket context
 import { ContextProvider } from "./SocketContext";
 
 ReactDOM.render(

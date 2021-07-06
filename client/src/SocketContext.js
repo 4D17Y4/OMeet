@@ -4,18 +4,23 @@ import Peer from "simple-peer";
 
 const SocketContext = createContext();
 
+/**
+ *
+ * Socket context provider.
+ * @returns
+ */
 const ContextProvider = ({ children }) => {
-  console.log("context called");
   const [id, setId] = useState("");
+  const [name, setName] = useState("");
   const [peers, setPeers] = useState([]);
-  const socketRef = useRef();
-  const userPreview = useRef();
-  const peersRef = useRef([]);
+  const [roomID, setRoomID] = useState("");
+  const [userStream, setUserStream] = useState();
   const [videoState, setVideoState] = useState(true);
   const [audioState, setAudioState] = useState(true);
-  const [roomID, setRoomID] = useState("");
-  const [name, setName] = useState("");
-  const [userStream, setUserStream] = useState();
+
+  const socketRef = useRef();
+  const peersRef = useRef([]);
+  const userPreview = useRef();
 
   /**
    * toggles given track (helper function for audio and video toggle.)
@@ -44,7 +49,6 @@ const ContextProvider = ({ children }) => {
    * Disables the user video stream and sends the update signal.
    */
   function videoToggle() {
-    console.log("video toggle " + videoState);
     setVideoState(!videoState);
     toggleTracks(userStream.getVideoTracks());
     sendUpdate(!videoState, audioState);
@@ -60,12 +64,17 @@ const ContextProvider = ({ children }) => {
     sendUpdate(videoState, !audioState);
   }
 
+  /**
+   * Join room
+   */
   function joinRoom() {
     socketRef.current = io.connect("/");
     setId(socketRef.current.id);
+
     init();
-    userPreview.current.srcObject = userStream;
     setName(name);
+    userPreview.current.srcObject = userStream;
+
     socketRef.current.emit("join room", {
       roomID,
       name,
@@ -79,6 +88,7 @@ const ContextProvider = ({ children }) => {
       video: videoState,
       audio: audioState,
     });
+
     setUserStream(stream);
     userPreview.current.srcObject = stream;
   };
@@ -111,13 +121,12 @@ const ContextProvider = ({ children }) => {
           peer,
         });
       });
+
       setPeers(peers);
     });
 
+    // for each user joined we add a new peer. (Mesh)
     socketRef.current.on("user joined", (payload) => {
-      console.log("user joined");
-      console.log(payload);
-
       const peer = addPeer(
         payload.signal,
         payload.callerID,
@@ -128,17 +137,18 @@ const ContextProvider = ({ children }) => {
       );
 
       peersRef.current.push({
-        peerID: payload.callerID,
         name: payload.name,
+        peerID: payload.callerID,
         videoState: payload.videoState,
         audioState: payload.audioState,
         peer,
       });
+
       setPeers([...peersRef.current]);
     });
 
+    // send update to the socket.
     socketRef.current.on("update user stream", (payload) => {
-      console.log("update user stream callled");
       const item = peersRef.current.find((p) => p.peerID === payload.callerID);
       if (item) {
         item.peer.emit("update", {
@@ -148,6 +158,7 @@ const ContextProvider = ({ children }) => {
       }
     });
 
+    // on user left, destroy the peer and filter the ref.
     socketRef.current.on("user left", (id) => {
       const peerObj = peersRef.current.find((p) => p.peerID === id);
       if (peerObj) {
@@ -158,6 +169,7 @@ const ContextProvider = ({ children }) => {
       setPeers(peers);
     });
 
+    // set the signal to peer on recieving returned signal data.
     socketRef.current.on("receiving returned signal", (payload) => {
       const item = peersRef.current.find((p) => p.peerID === payload.id);
       item.peer.signal(payload.signal);
@@ -168,6 +180,11 @@ const ContextProvider = ({ children }) => {
     getUserMedia();
   }, []);
 
+  /**
+   *
+   * @param {*} userToSignal end user to connect to on joining room.
+   * @returns
+   */
   function createPeer(userToSignal) {
     const peer = new Peer({
       initiator: true,
@@ -175,21 +192,36 @@ const ContextProvider = ({ children }) => {
       stream: userPreview.current.srcObject,
     });
 
+    // return signal.
     peer.on("signal", (signal) => {
-      console.log("signaling in socket " + name);
       socketRef.current.emit("sending signal", {
-        userToSignal,
-        callerID: socketRef.current.id,
-        signal,
         name,
+        signal,
+        userToSignal,
         videoState: videoState,
         audioState: audioState,
+        callerID: socketRef.current.id,
       });
     });
     return peer;
   }
 
-  function addPeer(incomingSignal, callerID, stream, name) {
+  /**
+   *
+   * @param {*} incomingSignal new user's signal
+   * @param {*} callerID new user's id.
+   * @param {*} stream new user's stream
+   * @param {*} name new user's name
+   * @returns
+   */
+  function addPeer(
+    incomingSignal,
+    callerID,
+    stream,
+    name,
+    videoState,
+    audioState
+  ) {
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -198,16 +230,15 @@ const ContextProvider = ({ children }) => {
 
     peer.on("signal", (signal) => {
       socketRef.current.emit("returning signal", {
+        name,
         signal,
         callerID,
-        name,
         videoState,
         audioState,
       });
     });
 
     peer.signal(incomingSignal);
-
     return peer;
   }
 
@@ -215,20 +246,20 @@ const ContextProvider = ({ children }) => {
     <SocketContext.Provider
       value={{
         id,
-        peers,
-        videoState,
-        setVideoState,
-        audioState,
-        setAudioState,
-        roomID,
-        setRoomID,
         name,
+        peers,
+        roomID,
         setName,
-        audioToggle,
-        videoToggle,
-        userStream,
         joinRoom,
+        setRoomID,
+        audioState,
+        videoState,
+        userStream,
+        videoToggle,
+        audioToggle,
         userPreview,
+        setVideoState,
+        setAudioState,
       }}
     >
       {children}

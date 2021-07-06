@@ -1,4 +1,4 @@
-.controls {
+.control {
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -11,10 +11,10 @@
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.178);
 }
 
-.controls__icon {
+.control__button {
   padding: 5px;
 }
 
-.icon {
+.control__icon {
   margin: 20px;
 }

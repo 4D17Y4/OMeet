@@ -14,17 +14,17 @@
   align-items: flex-end;
 }
 
-.participantVideo {
+.videoContainer__video {
   height: 100%;
   width: 100%;
 }
 
-.videoContainer__info {
+.videoContainer__user {
   position: absolute;
   margin-bottom: 10px;
 }
 
-.videoContainer__information {
+.videoContainer__info {
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -32,7 +32,7 @@
   border-radius: 50vw;
 }
 
-.connecting {
+.videoContainer__info--connecting {
   background: rgba(0, 0, 255, 0.4);
   height: 40px;
   width: 40px;
@@ -40,7 +40,8 @@
   float: right;
   margin-left: 10px;
 }
-.on {
+
+.videoContainer__info--on {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +52,8 @@
   float: right;
   margin-left: 10px;
 }
-.off {
+
+.videoContainer__info--off {
   display: flex;
   align-items: center;
   justify-content: center;

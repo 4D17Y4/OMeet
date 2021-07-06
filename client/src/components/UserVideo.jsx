@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import Cookies from "universal-cookie";
-import "./userVideo.css";
+import "./UserVideo.css";
 import MicOffRoundedIcon from "@material-ui/icons/MicOffRounded";
 import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import VideocamOffRoundedIcon from "@material-ui/icons/VideocamOffRounded";
@@ -18,7 +18,7 @@ function UserVideo(props) {
   }, []);
 
   return (
-    <div className="floating">
+    <div className="userFloating">
       <div className="videoFrame">
         <video className="videoFrame__video" ref={userPreview} autoPlay />
         {props.showButtons ? (

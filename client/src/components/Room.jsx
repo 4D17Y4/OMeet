@@ -1,41 +1,35 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect } from "react";
 import "./Room.css";
-import ParicipantsVideo from "./PariticipantsVideo";
+import ParticipantsVideo from "./PariticipantsVideo";
 import "./Room.css";
 import UserVideo from "./UserVideo";
 import Controls from "./Controls";
 import { SocketContext } from "../SocketContext.js";
 import { Button, TextField, Grid } from "@material-ui/core";
 import Header from "./Header";
-// createContext(SocketContext);
 
+/**
+ * Set up the room and join room.
+ * @param {*} props
+ * @returns
+ */
 const Room = (props) => {
-  const { roomID, setUp, joinRoom, name, peers } = useContext(SocketContext);
-
-  function showInGrid() {}
+  const { roomID, joinRoom, name, peers } = useContext(SocketContext);
 
   useEffect(() => {
-    // setUp();
-    console.log("inRoom " + name);
     joinRoom();
-    console.log(peers);
   }, []);
 
   return (
-    <div>
+    <div class="room">
       <Header />
-      <div className="view">
-        <div className="videoWrapper">
+      <div className="room__view">
+        <div className="room__videoWrapper">
           <UserVideo showButtons={false} />
         </div>
+
         {peers.length == 0 ? (
-          <div className="emptyRoom">
+          <div className="room__empty">
             <h1>
               OMeet is better with friends
               <br />
@@ -43,11 +37,11 @@ const Room = (props) => {
             </h1>
           </div>
         ) : (
-          <div className={"participantsContainer type" + peers.length}>
+          <div className={"room__videoGrid type" + peers.length}>
             {peers.map((peer) => {
               return (
-                <div className="twoContainer">
-                  <ParicipantsVideo
+                <div className="room__gridItem">
+                  <ParticipantsVideo
                     key={peer.peerID}
                     peer={peer.peer}
                     name={peer.name}

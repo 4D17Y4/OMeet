@@ -13,9 +13,9 @@ function Controls() {
     useContext(SocketContext);
 
   return (
-    <div className="controls">
-      <div className="icon">
-        <IconButton className="icon">
+    <div className="control">
+      <div className="control__icon">
+        <IconButton>
           {audioState ? (
             <MicRoundedIcon
               onClick={audioToggle}
@@ -31,31 +31,31 @@ function Controls() {
           )}
         </IconButton>
       </div>
-      <div className="icon">
-        <IconButton className="icon">
+      <div className="control__icon">
+        <IconButton>
           {videoState ? (
             <VideocamRoundedIcon
               onClick={videoToggle}
-              className="controls__icon"
+              className="control__button"
               fontSize="large"
             />
           ) : (
             <VideocamOffRoundedIcon
               onClick={videoToggle}
-              className="controls__icon"
+              className="control__button"
               fontSize="large"
             />
           )}
         </IconButton>
       </div>
-      <div className="icon">
+      <div className="control__icon">
         <IconButton>
-          <CallEndIcon className="controls__icon" fontSize="large" />
+          <CallEndIcon className="control__button" fontSize="large" />
         </IconButton>
       </div>
-      <div className="icon">
-        <IconButton className="icon">
-          <ForumIcon className="controls__icon" fontSize="large" />
+      <div className="control__icon">
+        <IconButton>
+          <ForumIcon className="control__button" fontSize="large" />
         </IconButton>
       </div>
     </div>

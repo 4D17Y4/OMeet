@@ -19,11 +19,11 @@ function ParticipantVideo(props) {
   const [width, setWidthState] = useState();
   const [height, setHeightState] = useState();
   const [className, setClassName] = useState("videoOff");
+
   /**
    * Use Effect for participants Video.
    */
   useEffect(() => {
-    // setNameState(props.name);
     /**
      * On recieveing the participants stream, set the ref and set connecting to false.
      *
@@ -58,18 +58,18 @@ function ParticipantVideo(props) {
 
   return (
     <div className={"videoContainer " + className}>
-      <video playsInline autoPlay ref={ref} className="participantVideo" />
-      <div className="videoContainer__info">
-        <div className="videoContainer__information">
+      <video playsInline autoPlay ref={ref} className="videoContainer__video" />
+      <div className="videoContainer__user">
+        <div className="videoContainer__info">
           <h2>{name}</h2>
           {connecting ? (
-            <div className="connecting" />
+            <div className="videoContainer__info--connecting" />
           ) : audioState ? (
-            <div className="on">
+            <div className="videoContainer__info--on">
               <MicRoundedIcon />
             </div>
           ) : (
-            <div className="off">
+            <div className="videoContainer__info--off">
               <MicOffRoundedIcon />
             </div>
           )}
