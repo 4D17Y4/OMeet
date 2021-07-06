@@ -1,0 +1,64 @@
+.videoContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  /* align-items: flex-end; */
+  justify-content: center;
+}
+
+.videoOff {
+  align-items: center;
+}
+
+.videoOn {
+  align-items: flex-end;
+}
+
+.participantVideo {
+  height: 100%;
+  width: 100%;
+}
+
+.videoContainer__info {
+  position: absolute;
+  margin-bottom: 10px;
+}
+
+.videoContainer__information {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background: rgba(128, 128, 128, 0.4);
+  border-radius: 50vw;
+}
+
+.connecting {
+  background: rgba(0, 0, 255, 0.4);
+  height: 40px;
+  width: 40px;
+  border-radius: 50vw;
+  float: right;
+  margin-left: 10px;
+}
+.on {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 128, 0, 0.4);
+  height: 40px;
+  width: 40px;
+  border-radius: 50vw;
+  float: right;
+  margin-left: 10px;
+}
+.off {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 0, 0, 0.4);
+  height: 40px;
+  width: 40px;
+  border-radius: 50vw;
+  float: right;
+  margin-left: 10px;
+}

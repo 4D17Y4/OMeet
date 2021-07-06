@@ -1,0 +1,54 @@
+@media (min-width: 960px) {
+  .floating {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+  }
+  .videoFrame {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    /* height: 100%;
+  width: 100%; */
+  }
+}
+@media (max-width: 960px) {
+  .floating {
+    position: absolute;
+    z-index: -1;
+    height: 100%;
+  }
+  .videoFrame {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    height: 100%;
+  }
+}
+
+.videoFrame__video {
+  border-radius: 10px;
+  overflow: hidden;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  box-shadow: 0px 10px 53px 0px rgba(0, 0, 0, 0.3);
+}
+.videoFrame__buttonContainer {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  bottom: 10px;
+}
+.videoFrame__muteMicrophone {
+  color: green;
+}
+.videoFrame__onMicrophone {
+  color: red;
+}
+.videoFrame__muteCamera {
+  color: green;
+}
+.videoFrame__onCamera {
+  color: red;
+}

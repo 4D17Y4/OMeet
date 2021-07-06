@@ -1,0 +1,108 @@
+@media (min-width: 960px) {
+  .options {
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    -moz-transform: translateX(-15%) translateY(-50%);
+    -webkit-transform: translateX(-15%) translateY(-50%);
+    transform: translateX(-15%) translateY(-50%);
+  }
+  .userVideoContainer {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    justify-content: center;
+  }
+  .createRoomContainer {
+    height: 80vh;
+    width: 100vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    /* padding-bottom:8vh; */
+    justify-content: center;
+  }
+  .optionsContainer {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    height: 100%;
+  }
+  .wrapper {
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    top: 50%;
+    left: 85%;
+    -moz-transform: translateX(-85%) translateY(-50%);
+    -webkit-transform: translateX(-85%) translateY(-50%);
+    transform: translateX(-85%) translateY(-50%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+@media (max-width: 960px) {
+  .options {
+    width: 50%;
+    min-width: 300px;
+  }
+  .userVideoContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+    height: 100%;
+  }
+  .createRoomContainer {
+    margin: 5vh 0px;
+    height: 80vh;
+    width: 100vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    /* padding-bottom:8vh; */
+    justify-content: center;
+  }
+  .gridItem {
+    width: 100%;
+    height: 50%;
+  }
+  .optionsContainer {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+  }
+  .wrapper {
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
