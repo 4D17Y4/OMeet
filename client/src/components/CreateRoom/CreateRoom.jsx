@@ -2,14 +2,26 @@ import React, { useContext, useState, useRef, useEffect } from "react";
 import { v1 as uuid } from "uuid";
 import { Button, TextField, Grid } from "@material-ui/core";
 import "./CreateRoom.css";
-import UserVideo from "./UserVideo";
-import Header from "./Header";
+import UserVideo from "../UserVideo/UserVideo";
+import Header from "../Header/Header";
 import { Link } from "react-router-dom";
-import { SocketContext } from "../SocketContext.js";
+import { SocketContext } from "../../SocketContext.js";
 
 function CreateRoom() {
-  const { videoState, audioState, roomID, setRoomID, name, setName } =
-    useContext(SocketContext);
+  const {
+    initUserPreview,
+    videoState,
+    audioState,
+    roomID,
+    setRoomID,
+    name,
+    setName,
+  } = useContext(SocketContext);
+
+  useEffect(() => {
+    console.log(name);
+    initUserPreview();
+  }, []);
 
   return (
     <div className="view">
@@ -40,6 +52,9 @@ function CreateRoom() {
               />
               <div className="form__submit">
                 <Link
+                  onClick={(event) =>
+                    !name || !roomID ? event.preventDefault() : null
+                  }
                   to={{
                     pathname: `/room/${roomID}`,
                     state: { userName: name },

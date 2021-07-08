@@ -5,15 +5,62 @@ const app = express();
 const server = http.createServer(app);
 const socket = require("socket.io");
 const io = socket(server);
+const {
+  addChatUser,
+  removeChatUser,
+  getChatUser,
+  getChatUsersInRoom,
+} = require("./chatUsers.js");
 
-// Maintain a list of users.
-const users = {};
-
-// Maintain soket to room link.
-const socketToRoom = {};
+const {
+  addVideoUser,
+  removeVideoUser,
+  getVideoUser,
+  getVideoUsersInRoom,
+  updateVideoUser,
+  getVideoParticipantsInRoom,
+} = require("./videoUsers.js");
 
 // On socket connction.
 io.on("connection", (socket) => {
+  console.log("connected " + socket.id);
+
+  socket.on("join chat", (payload) => {
+    const { error, chatUser } = addChatUser({
+      id: socket.id,
+      name: payload.name,
+      room: payload.room,
+    });
+    if (error) {
+      return;
+    }
+    socket.emit("message", {
+      user: "admin",
+      text: `${chatUser.name} welcome to the room ${chatUser.room}`,
+    });
+
+    socket.broadcast.to(chatUser.room).emit("message", {
+      user: "admin",
+      text: `A mighty ${chatUser.name} hoped into the room`,
+    });
+
+    socket.join(chatUser.room);
+
+    console.log("sending room data...");
+    console.log(getChatUsersInRoom(chatUser.room));
+    io.to(chatUser.room).emit("roomData", getChatUsersInRoom(chatUser.room));
+  });
+
+  socket.on("sendMessage", (message, callback) => {
+    const chatUser = getChatUser(socket.id);
+    console.log("sendMessage");
+    io.to(chatUser.room).emit("message", {
+      user: chatUser.name,
+      text: message,
+    });
+    callback();
+  });
+
   /**
    * User joins the room.
    * @param {payload} contains
@@ -23,43 +70,26 @@ io.on("connection", (socket) => {
    * - audioState (current audio state of the user)
    */
   socket.on("join room", (payload) => {
-    // check if room is already present.
-    if (users[payload.roomID]) {
-      const length = users[payload.roomID].length;
+    console.log("user joining");
+    console.log(payload);
+    const { error, videoUser } = addVideoUser({
+      id: socket.id,
+      name: payload.name,
+      room: payload.roomID,
+      videoState: payload.videoState,
+      audioState: payload.audioState,
+    });
 
-      // check if room is full.
-      if (length === 5) {
-        socket.emit("room full");
-        return;
-      }
-
-      // if room has space join the user.
-      users[payload.roomID].push({
-        userName: payload.name,
-        id: socket.id,
-        videoState: payload.videoState,
-        audioState: payload.audioState,
-      });
-    } else {
-      // room not present init room.
-
-      users[payload.roomID] = [
-        {
-          userName: payload.name,
-          id: socket.id,
-          videoState: payload.videoState,
-          audioState: payload.audioState,
-        },
-      ];
+    if (error) {
+      return;
     }
-    socketToRoom[socket.id] = payload.roomID;
 
-    const usersInThisRoom = users[payload.roomID].filter(
-      (user) => user.id !== socket.id
+    socket.emit(
+      "all users",
+      getVideoParticipantsInRoom(payload.roomID, socket.id)
     );
 
-    // get all room participants to the user joined.
-    socket.emit("all users", usersInThisRoom);
+    socket.join(payload.roomID);
   });
 
   /**
@@ -72,6 +102,7 @@ io.on("connection", (socket) => {
    * - audioState (user current audio state)
    */
   socket.on("sending signal", (payload) => {
+    console.log("sending signal", payload);
     io.to(payload.userToSignal).emit("user joined", {
       signal: payload.signal,
       callerID: payload.callerID,
@@ -102,35 +133,55 @@ io.on("connection", (socket) => {
    */
   socket.on("user updated", (payload) => {
     // update the user attributes in user list.
-    for (var i = 0; i < users[payload.roomId].length; i++) {
-      if (socket.id === users[payload.roomId][i].id) {
-        users[payload.roomId][i].videoState = payload.videoEnabled;
-        users[payload.roomId][i].audioState = payload.audioEnabled;
-      }
-    }
+    updateVideoUser({
+      id: socket.id,
+      room: payload.roomId,
+      videoState: payload.videoEnabled,
+      audioState: payload.audioEnabled,
+    });
 
     // broadcast user stream update.
-    socket.broadcast.emit("update user stream", {
+    socket.broadcast.to(payload.roomId).emit("update user stream", {
       videoEnabled: payload.videoEnabled,
       audioEnabled: payload.audioEnabled,
-      callerID: socket.id,
+      callerID: socket.id.toString(),
     });
+  });
+
+  socket.on("videoCallEnded", () => {
+    console.log("videoCallEnded");
+    const userRemoved = removeVideoUser(socket.id);
+    if (userRemoved) {
+      socket.broadcast
+        .to(userRemoved.room)
+        .emit("user left", socket.id.toString());
+
+      io.to(userRemoved.room).emit("message", {
+        user: "admin",
+        text: `${userRemoved.name} left the video call`,
+      });
+    }
+  });
+
+  socket.on("leaveRoom", () => {
+    const userRemoved = removeChatUser(socket.id);
+    if (userRemoved) {
+      socket.broadcast.to(userRemoved.room).emit("message", {
+        user: "admin",
+        text: `Guys calm down, ${userRemoved.name} left the room`,
+      });
+      io.to(userRemoved.room).emit(
+        "roomData",
+        getChatUsersInRoom(userRemoved.room)
+      );
+    }
   });
 
   /**
    * Handle user disconnect
    */
   socket.on("disconnect", () => {
-    const roomID = socketToRoom[socket.id];
-    // getRoom.
-    let room = users[roomID];
-
-    // remove user from room.
-    if (room) {
-      room = room.filter((user) => user.id !== socket.id);
-      users[roomID] = room;
-    }
-    socket.broadcast.emit("user left", socket.id);
+    socket.emit("cleanUser");
   });
 });
 

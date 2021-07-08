@@ -1,27 +1,25 @@
 import React, { useContext, useEffect } from "react";
 import "./Room.css";
-import ParticipantsVideo from "./PariticipantsVideo";
-import "./Room.css";
-import UserVideo from "./UserVideo";
-import Controls from "./Controls";
-import { SocketContext } from "../SocketContext.js";
-import { Button, TextField, Grid } from "@material-ui/core";
-import Header from "./Header";
+import ParticipantVideo from "../ParticipantsVideo/ParticipantVideo";
+import UserVideo from "../UserVideo/UserVideo";
+import Controls from "../Controls/Controls";
+import { SocketContext } from "../../SocketContext.js";
+import Header from "../Header/Header";
 
 /**
  * Set up the room and join room.
  * @param {*} props
  * @returns
  */
-const Room = (props) => {
-  const { roomID, joinRoom, name, peers } = useContext(SocketContext);
+const Room = () => {
+  const { roomID, joinVideoChat, peers } = useContext(SocketContext);
 
   useEffect(() => {
-    joinRoom();
+    joinVideoChat();
   }, []);
 
   return (
-    <div class="room">
+    <div className="room">
       <Header />
       <div className="room__view">
         <div className="room__videoWrapper">
@@ -40,9 +38,8 @@ const Room = (props) => {
           <div className={"room__videoGrid type" + peers.length}>
             {peers.map((peer) => {
               return (
-                <div className="room__gridItem">
-                  <ParticipantsVideo
-                    key={peer.peerID}
+                <div key={peer.peerID} className="room__gridItem">
+                  <ParticipantVideo
                     peer={peer.peer}
                     name={peer.name}
                     size={peers.length}
@@ -55,7 +52,7 @@ const Room = (props) => {
           </div>
         )}
       </div>
-      <Controls />
+      <Controls inVideo={true} />
     </div>
   );
 };

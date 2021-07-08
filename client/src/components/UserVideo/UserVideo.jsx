@@ -6,7 +6,7 @@ import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import VideocamOffRoundedIcon from "@material-ui/icons/VideocamOffRounded";
 import VideocamRoundedIcon from "@material-ui/icons/VideocamRounded";
 import IconButton from "@material-ui/core/IconButton";
-import { SocketContext } from "../SocketContext.js";
+import { SocketContext } from "../../SocketContext.js";
 
 function UserVideo(props) {
   const { userPreview, videoState, audioState, audioToggle, videoToggle } =

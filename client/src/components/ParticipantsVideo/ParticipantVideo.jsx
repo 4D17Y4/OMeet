@@ -10,7 +10,7 @@ import MicRoundedIcon from "@material-ui/icons/MicRounded";
  *         boolean audioState: current audio state of the paricipant} props
  * @returns
  */
-function ParticipantVideo(props) {
+function ParticipantVideo(props, key) {
   const ref = useRef();
   const [connecting, setConnecting] = useState(true);
   const [videoState, setVideoState] = useState(props.videoState);

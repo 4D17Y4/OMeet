@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  height: 100%;
+  width: 80%;
+  box-shadow: inset 0px 0 10px 0.5px rgba(0, 0, 0, 0.1);
+}
+
+.outerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 84vh;
+}

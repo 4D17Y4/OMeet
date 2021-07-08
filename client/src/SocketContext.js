@@ -14,9 +14,13 @@ const ContextProvider = ({ children }) => {
   const [name, setName] = useState("");
   const [peers, setPeers] = useState([]);
   const [roomID, setRoomID] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [userStream, setUserStream] = useState();
   const [videoState, setVideoState] = useState(true);
   const [audioState, setAudioState] = useState(true);
+  const [socket, setSocket] = useState();
+  const [chatUsers, setChatUsers] = useState([]);
 
   const socketRef = useRef();
   const peersRef = useRef([]);
@@ -64,26 +68,44 @@ const ContextProvider = ({ children }) => {
     sendUpdate(videoState, !audioState);
   }
 
+  useEffect(() => {
+    // getUserMedia();
+    initSocket();
+  }, []);
+
+  function initSocket() {
+    console.log("initSocketCalled");
+    socketRef.current = io.connect("/");
+    setId(socketRef.current.id);
+    setSocket(socketRef.current);
+  }
+
+  function joinChatRoom() {
+    console.log("join chat");
+    socketRef.current.emit("join chat", { name, room: roomID });
+  }
+
+  function sendMessage(message) {
+    socketRef.current.emit("sendMessage", message, () => setMessage(""));
+  }
+
   /**
    * Join room
    */
-  function joinRoom() {
-    socketRef.current = io.connect("/");
-    setId(socketRef.current.id);
-
-    init();
-    setName(name);
+  function joinVideoChat() {
+    initRoom();
     userPreview.current.srcObject = userStream;
-
+    console.log("join video chat " + roomID + " " + name);
     socketRef.current.emit("join room", {
       roomID,
       name,
       videoState,
       audioState,
     });
+    console.log("join video chat after" + roomID + " " + name);
   }
 
-  const getUserMedia = async () => {
+  const initUserPreview = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: videoState,
       audio: audioState,
@@ -93,11 +115,20 @@ const ContextProvider = ({ children }) => {
     userPreview.current.srcObject = stream;
   };
 
+  useEffect(() => {
+    socketRef.current.on("message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
+
+    socketRef.current.on("roomData", (users) => {
+      setChatUsers(users);
+    });
+  }, []);
+
   /**
    * SetUp the room.
    */
-
-  function init() {
+  function initRoom() {
     socketRef.current.on("all users", (users) => {
       // set up a new temporary peers array.
       const peers = [];
@@ -107,7 +138,7 @@ const ContextProvider = ({ children }) => {
         const peer = createPeer(user.id);
         peersRef.current.push({
           peerID: user.id,
-          name: user.userName,
+          name: user.name,
           videoState: user.videoState,
           audioState: user.audioState,
           peer,
@@ -115,18 +146,18 @@ const ContextProvider = ({ children }) => {
 
         peers.push({
           peerID: user.id,
-          name: user.userName,
+          name: user.name,
           videoState: user.videoState,
           audioState: user.audioState,
           peer,
         });
       });
-
       setPeers(peers);
     });
 
     // for each user joined we add a new peer. (Mesh)
     socketRef.current.on("user joined", (payload) => {
+      console.log("userJoined", payload);
       const peer = addPeer(
         payload.signal,
         payload.callerID,
@@ -169,16 +200,17 @@ const ContextProvider = ({ children }) => {
       setPeers(peers);
     });
 
+    socketRef.current.on("cleanUser", () => {
+      endVideoCall();
+      endCall();
+    });
+
     // set the signal to peer on recieving returned signal data.
     socketRef.current.on("receiving returned signal", (payload) => {
       const item = peersRef.current.find((p) => p.peerID === payload.id);
       item.peer.signal(payload.signal);
     });
   }
-
-  useEffect(() => {
-    getUserMedia();
-  }, []);
 
   /**
    *
@@ -194,6 +226,7 @@ const ContextProvider = ({ children }) => {
 
     // return signal.
     peer.on("signal", (signal) => {
+      console.log("signal " + name + " " + roomID);
       socketRef.current.emit("sending signal", {
         name,
         signal,
@@ -204,6 +237,25 @@ const ContextProvider = ({ children }) => {
       });
     });
     return peer;
+  }
+
+  function endVideoCall() {
+    socketRef.current.emit("videoCallEnded");
+    setPeers([]);
+    userStream.getAudioTracks().forEach((track) => {
+      track.stop();
+    });
+    userStream.getVideoTracks().forEach((track) => {
+      track.stop();
+    });
+    setAudioState(true);
+    setVideoState(true);
+  }
+
+  function endCall() {
+    socketRef.current.emit("leaveRoom");
+    setMessages([]);
+    setChatUsers([]);
   }
 
   /**
@@ -248,18 +300,30 @@ const ContextProvider = ({ children }) => {
         id,
         name,
         peers,
+        socket,
         roomID,
         setName,
-        joinRoom,
+        message,
+        messages,
+        socketRef,
         setRoomID,
+        setMessage,
         audioState,
         videoState,
         userStream,
         videoToggle,
         audioToggle,
+        sendMessage,
         userPreview,
+        setMessages,
+        joinChatRoom,
         setVideoState,
         setAudioState,
+        joinVideoChat,
+        endVideoCall,
+        initUserPreview,
+        chatUsers,
+        endCall,
       }}
     >
       {children}
