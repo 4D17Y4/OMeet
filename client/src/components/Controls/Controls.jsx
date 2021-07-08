@@ -11,21 +11,49 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { SocketContext } from "../../SocketContext.js";
 import IconButton from "@material-ui/core/IconButton";
 import "./Controls.css";
-function Controls({ inVideo }) {
+function Controls({ props, inVideo, toggleDrawer }) {
   const {
     endCall,
     audioState,
     videoState,
     roomID,
-    name,
     audioToggle,
     videoToggle,
     endVideoCall,
   } = useContext(SocketContext);
 
+  function leaveVideoCall(event) {
+    event.preventDefault();
+    if (
+      window.confirm(
+        "Are you sure ? You will leave the video room and will be redirected to the chat."
+      )
+    ) {
+      endVideoCall();
+      props.history.push(`/chat/${roomID}`);
+    }
+  }
+
+  function leaveCall(event) {
+    event.preventDefault();
+    if (window.confirm("Are you sure ? You will leave the room.")) {
+      endCall();
+      props.history.push(`/`);
+    }
+  }
+
   if (inVideo) {
     return (
       <div className="control">
+        <div className="control__icon">
+          <IconButton>
+            <ForumIcon
+              onClick={toggleDrawer}
+              className="control__button"
+              fontSize="large"
+            />
+          </IconButton>
+        </div>
         <div className="control__icon">
           <IconButton>
             {audioState ? (
@@ -62,21 +90,18 @@ function Controls({ inVideo }) {
         </div>
         <div className="control__icon">
           <Link
-            onClick={endVideoCall}
-            to={{
-              pathname: `/chat/${roomID}`,
-              state: { userName: name },
-            }}
+            onClick={leaveVideoCall}
+            to={
+              {
+                // pathname: `/chat/${roomID}`,
+                // state: { userName: name },
+              }
+            }
           >
             <IconButton>
               <CallEndIcon className="control__button" fontSize="large" />
             </IconButton>
           </Link>
-        </div>
-        <div className="control__icon">
-          <IconButton>
-            <ForumIcon className="control__button" fontSize="large" />
-          </IconButton>
         </div>
       </div>
     );
@@ -91,7 +116,7 @@ function Controls({ inVideo }) {
           </Link>
         </div>
         <div className="control__icon">
-          <Link onClick={endCall} to={`/`}>
+          <Link onClick={leaveCall}>
             <IconButton>
               <ExitToAppIcon className="control__button" fontSize="large" />
             </IconButton>

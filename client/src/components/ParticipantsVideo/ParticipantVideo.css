@@ -1,5 +1,6 @@
 .videoContainer {
   width: 100%;
+  z-index: -1;
   height: 100%;
   display: flex;
   /* align-items: flex-end; */

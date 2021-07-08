@@ -4,12 +4,21 @@ import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
 import { SocketContext } from "../../SocketContext.js";
 import Participants from "../Participants/Participants";
+import { browserHistory } from "react-router";
 
 function Chat() {
-  const { joinChatRoom, chatUsers, messages, name, roomID } =
-    useContext(SocketContext);
+  const {
+    joinChatRoom,
+    joinRoom,
+    chatUsers,
+    messages,
+    name,
+    roomID,
+    socketRef,
+  } = useContext(SocketContext);
 
   useEffect(() => {
+    joinRoom();
     joinChatRoom();
   }, []);
 

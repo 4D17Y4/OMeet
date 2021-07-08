@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { createContext, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 
@@ -68,10 +68,10 @@ const ContextProvider = ({ children }) => {
     sendUpdate(videoState, !audioState);
   }
 
-  useEffect(() => {
-    // getUserMedia();
+  function joinRoom() {
     initSocket();
-  }, []);
+    initRoom();
+  }
 
   function initSocket() {
     console.log("initSocketCalled");
@@ -93,7 +93,6 @@ const ContextProvider = ({ children }) => {
    * Join room
    */
   function joinVideoChat() {
-    initRoom();
     userPreview.current.srcObject = userStream;
     console.log("join video chat " + roomID + " " + name);
     socketRef.current.emit("join room", {
@@ -115,7 +114,10 @@ const ContextProvider = ({ children }) => {
     userPreview.current.srcObject = stream;
   };
 
-  useEffect(() => {
+  /**
+   * SetUp the room.
+   */
+  function initRoom() {
     socketRef.current.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
@@ -123,12 +125,7 @@ const ContextProvider = ({ children }) => {
     socketRef.current.on("roomData", (users) => {
       setChatUsers(users);
     });
-  }, []);
 
-  /**
-   * SetUp the room.
-   */
-  function initRoom() {
     socketRef.current.on("all users", (users) => {
       // set up a new temporary peers array.
       const peers = [];
@@ -157,7 +154,6 @@ const ContextProvider = ({ children }) => {
 
     // for each user joined we add a new peer. (Mesh)
     socketRef.current.on("user joined", (payload) => {
-      console.log("userJoined", payload);
       const peer = addPeer(
         payload.signal,
         payload.callerID,
@@ -201,6 +197,7 @@ const ContextProvider = ({ children }) => {
     });
 
     socketRef.current.on("cleanUser", () => {
+      console.log("clean User called " + socketRef.current.id);
       endVideoCall();
       endCall();
     });
@@ -226,13 +223,9 @@ const ContextProvider = ({ children }) => {
 
     // return signal.
     peer.on("signal", (signal) => {
-      console.log("signal " + name + " " + roomID);
       socketRef.current.emit("sending signal", {
-        name,
         signal,
         userToSignal,
-        videoState: videoState,
-        audioState: audioState,
         callerID: socketRef.current.id,
       });
     });
@@ -240,7 +233,6 @@ const ContextProvider = ({ children }) => {
   }
 
   function endVideoCall() {
-    socketRef.current.emit("videoCallEnded");
     setPeers([]);
     userStream.getAudioTracks().forEach((track) => {
       track.stop();
@@ -250,12 +242,13 @@ const ContextProvider = ({ children }) => {
     });
     setAudioState(true);
     setVideoState(true);
+    socketRef.current.emit("videoCallEnded");
   }
 
   function endCall() {
-    socketRef.current.emit("leaveRoom");
     setMessages([]);
     setChatUsers([]);
+    socketRef.current.emit("leaveRoom");
   }
 
   /**
@@ -302,6 +295,7 @@ const ContextProvider = ({ children }) => {
         peers,
         socket,
         roomID,
+        joinRoom,
         setName,
         message,
         messages,

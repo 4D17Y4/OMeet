@@ -1,31 +1,86 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Room.css";
 import ParticipantVideo from "../ParticipantsVideo/ParticipantVideo";
 import UserVideo from "../UserVideo/UserVideo";
 import Controls from "../Controls/Controls";
 import { SocketContext } from "../../SocketContext.js";
 import Header from "../Header/Header";
-
+import ChatDrawer from "../ChatDrawer/ChatDrawer";
 /**
  * Set up the room and join room.
  * @param {*} props
  * @returns
  */
-const Room = () => {
-  const { roomID, joinVideoChat, peers } = useContext(SocketContext);
+const Room = (props) => {
+  const {
+    name,
+    messages,
+    roomID,
+    joinVideoChat,
+    socketRef,
+    endVideoCall,
+    peers,
+  } = useContext(SocketContext);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const onBackButtonEvent = (e) => {
+    e.preventDefault();
+    if (
+      window.confirm(
+        "Are you sure ? You will leave the video room and will be redirected to the chat."
+      )
+    ) {
+      endVideoCall();
+      props.history.push(`/chat/${roomID}`);
+    } else {
+      window.history.pushState(null, null, window.location.pathname);
+    }
+  };
 
   useEffect(() => {
+    if (!socketRef.current) {
+      props.history.push("/");
+      return;
+    }
+
     joinVideoChat();
+
+    window.onbeforeunload = (event) => {
+      const e = event || window.event;
+      e.preventDefault();
+      if (e) {
+        e.returnValue = "";
+      }
+      return "";
+    };
+
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", onBackButtonEvent);
+
+    return () => {
+      window.onbeforeunload = null;
+      window.removeEventListener("popstate", onBackButtonEvent);
+    };
   }, []);
+
+  function toggleDrawer() {
+    setDrawerOpen(!drawerOpen);
+  }
 
   return (
     <div className="room">
       <Header />
       <div className="room__view">
+        <ChatDrawer
+          drawerOpen={drawerOpen}
+          toggleDrawer={toggleDrawer}
+          name={name}
+          messages={messages}
+          room={roomID}
+        />
         <div className="room__videoWrapper">
           <UserVideo showButtons={false} />
         </div>
-
         {peers.length == 0 ? (
           <div className="room__empty">
             <h1>
@@ -52,7 +107,7 @@ const Room = () => {
           </div>
         )}
       </div>
-      <Controls inVideo={true} />
+      <Controls props={props} inVideo={true} toggleDrawer={toggleDrawer} />
     </div>
   );
 };

@@ -102,13 +102,13 @@ io.on("connection", (socket) => {
    * - audioState (user current audio state)
    */
   socket.on("sending signal", (payload) => {
-    console.log("sending signal", payload);
+    const user = getVideoUser(payload.callerID);
     io.to(payload.userToSignal).emit("user joined", {
       signal: payload.signal,
       callerID: payload.callerID,
-      name: payload.name,
-      videoState: payload.videoState,
-      audioState: payload.audioState,
+      name: user.name,
+      videoState: user.videoState,
+      audioState: user.audioState,
     });
   });
 
@@ -149,7 +149,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("videoCallEnded", () => {
-    console.log("videoCallEnded");
+    endVideoCall();
+  });
+
+  function endVideoCall() {
     const userRemoved = removeVideoUser(socket.id);
     if (userRemoved) {
       socket.broadcast
@@ -161,9 +164,13 @@ io.on("connection", (socket) => {
         text: `${userRemoved.name} left the video call`,
       });
     }
-  });
+  }
 
   socket.on("leaveRoom", () => {
+    leaveRoom();
+  });
+
+  function leaveRoom() {
     const userRemoved = removeChatUser(socket.id);
     if (userRemoved) {
       socket.broadcast.to(userRemoved.room).emit("message", {
@@ -174,14 +181,17 @@ io.on("connection", (socket) => {
         "roomData",
         getChatUsersInRoom(userRemoved.room)
       );
+      socket.leave(userRemoved.room);
     }
-  });
+  }
 
   /**
    * Handle user disconnect
    */
   socket.on("disconnect", () => {
     socket.emit("cleanUser");
+    endVideoCall();
+    leaveRoom();
   });
 });
 

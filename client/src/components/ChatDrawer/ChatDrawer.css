@@ -1,0 +1,31 @@
+.Drawer__Container {
+  display: flex;
+  height: 84vh;
+  width: 30vw;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  transition: all 0.3s ease-in-out;
+  transform: translate(-30vw);
+  position: absolute;
+  box-shadow: 4px 0 15px 3px rgba(0, 0, 0, 0.1);
+}
+
+.Drawer__Container--isOpen {
+  transform: translate(0);
+}
+
+.Drawer__roomName {
+  margin-top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 1.4em;
+  background: #f3f3f3;
+}
+
+.closeIcon {
+  position: absolute;
+  right: 20px;
+}
