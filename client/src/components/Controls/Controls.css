@@ -6,10 +6,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: var(--P);
+  color: var(--T4);
   height: calc(8vh - 5px);
   z-index: 10;
-  border-top: 5px solid #f9f9f9;
+  border-top: 5px solid var(--T3);
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.178);
 }
 
@@ -19,4 +20,5 @@
 
 .control__icon {
   margin: 20px;
+  color: #e2e2f6;
 }

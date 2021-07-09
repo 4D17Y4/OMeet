@@ -11,6 +11,11 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { SocketContext } from "../../SocketContext.js";
 import IconButton from "@material-ui/core/IconButton";
 import "./Controls.css";
+import { initializeIcons } from "@fluentui/react";
+import { Icon } from "@fluentui/react/lib/Icon";
+
+initializeIcons();
+
 function Controls({ props, inVideo, toggleDrawer }) {
   const {
     endCall,
@@ -45,61 +50,53 @@ function Controls({ props, inVideo, toggleDrawer }) {
   if (inVideo) {
     return (
       <div className="control">
-        <div className="control__icon">
+        <div className="control__button">
           <IconButton>
             <ForumIcon
               onClick={toggleDrawer}
-              className="control__button"
+              className="control__icon"
               fontSize="large"
             />
           </IconButton>
         </div>
-        <div className="control__icon">
+        <div className="control__button">
           <IconButton>
             {audioState ? (
               <MicRoundedIcon
                 onClick={audioToggle}
-                className="controls__icon"
+                className="control__icon"
                 fontSize="large"
               />
             ) : (
               <MicOffRoundedIcon
                 onClick={audioToggle}
-                className="controls__icon"
+                className="control__icon"
                 fontSize="large"
               />
             )}
           </IconButton>
         </div>
-        <div className="control__icon">
+        <div className="control__button">
           <IconButton>
             {videoState ? (
               <VideocamRoundedIcon
                 onClick={videoToggle}
-                className="control__button"
+                className="control__icon"
                 fontSize="large"
               />
             ) : (
               <VideocamOffRoundedIcon
                 onClick={videoToggle}
-                className="control__button"
+                className="control__icon"
                 fontSize="large"
               />
             )}
           </IconButton>
         </div>
-        <div className="control__icon">
-          <Link
-            onClick={leaveVideoCall}
-            to={
-              {
-                // pathname: `/chat/${roomID}`,
-                // state: { userName: name },
-              }
-            }
-          >
+        <div className="control__button">
+          <Link style={{ textDecoration: "none" }} onClick={leaveVideoCall}>
             <IconButton>
-              <CallEndIcon className="control__button" fontSize="large" />
+              <CallEndIcon className="control__icon" fontSize="large" />
             </IconButton>
           </Link>
         </div>
@@ -108,19 +105,17 @@ function Controls({ props, inVideo, toggleDrawer }) {
   } else {
     return (
       <div className="control">
-        <div className="control__icon">
-          <Link to={`/preview`}>
+        <div className="control__button">
+          <Link style={{ textDecoration: "none" }} to={`/preview`}>
             <IconButton>
-              <VideoCallIcon className="control__button" fontSize="large" />
+              <VideoCallIcon className="control__icon" fontSize="large" />
             </IconButton>
           </Link>
         </div>
-        <div className="control__icon">
-          <Link onClick={leaveCall}>
-            <IconButton>
-              <ExitToAppIcon className="control__button" fontSize="large" />
-            </IconButton>
-          </Link>
+        <div className="control__button">
+          <IconButton onClick={leaveCall}>
+            <ExitToAppIcon className="control__icon" fontSize="large" />
+          </IconButton>
         </div>
       </div>
     );

@@ -10,8 +10,16 @@ function ChatMessage({ message, name }) {
 
   return myMessage ? (
     <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{message.user}</p>
-      <div className="messageBox backgroundWhite">
+      <div className="messageBox backgroundT3">
+        <div className="head">
+          <p className="sentText pr-10">{message.user}</p>
+          <p
+            style={{ padding: "0", fontWeight: "400", fontSize: "0.9em" }}
+            className="sentText pr-10"
+          >
+            {message.time}
+          </p>
+        </div>
         <p className="messageText colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
@@ -19,12 +27,20 @@ function ChatMessage({ message, name }) {
     </div>
   ) : (
     <div className="messageContainer justifyStart">
-      <div className="messageBox backgroundLight">
+      <div className="messageBox backgroundWhite">
+        <div className="head">
+          <p className="sentText pr-10">{message.user}</p>
+          <p
+            style={{ padding: "0", fontWeight: "400" }}
+            className="sentText pr-10"
+          >
+            {message.time}
+          </p>
+        </div>
         <p className="messageText colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
       </div>
-      <p className="sentText pl-10 ">{message.user}</p>
     </div>
   );
 }

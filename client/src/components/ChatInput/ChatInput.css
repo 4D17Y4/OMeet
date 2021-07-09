@@ -3,9 +3,10 @@
 }
 
 .input {
-  border: 2px solid #d3d3d3;
+  border: 0;
+  border-bottom: 3px solid var(--P);
   border-radius: 8px;
-  padding: 20px;
+  padding: 15px 20px;
   margin: 1.5vw;
   width: 80vw;
   font-size: 1.2em;
@@ -18,14 +19,9 @@ select:focus {
 }
 
 .sendButton {
-  color: #fff !important;
-  text-transform: uppercase;
-  text-decoration: none;
   margin: 1.5vw;
   margin-left: 0;
-  display: inline-block;
   border: none;
-  width: 13.5vw;
   border-radius: 8px;
   padding: 0;
 }

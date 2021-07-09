@@ -106,11 +106,15 @@ const ContextProvider = ({ children }) => {
 
   const initUserPreview = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: videoState,
+      video: { aspectRatio: 1.5 },
       audio: audioState,
     });
 
+    const constraints = {};
+    stream.getVideoTracks()[0].applyConstraints(constraints);
+
     setUserStream(stream);
+
     userPreview.current.srcObject = stream;
   };
 

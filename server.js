@@ -21,6 +21,25 @@ const {
   getVideoParticipantsInRoom,
 } = require("./videoUsers.js");
 
+function getTime() {
+  const date = new Date();
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  var strTime =
+    date.toLocaleDateString("en", { weekday: "long" }) +
+    " " +
+    hours +
+    ":" +
+    minutes +
+    " " +
+    ampm;
+  return strTime;
+}
+
 // On socket connction.
 io.on("connection", (socket) => {
   console.log("connected " + socket.id);
@@ -35,13 +54,15 @@ io.on("connection", (socket) => {
       return;
     }
     socket.emit("message", {
-      user: "admin",
+      user: "Admin",
       text: `${chatUser.name} welcome to the room ${chatUser.room}`,
+      time: getTime(),
     });
 
     socket.broadcast.to(chatUser.room).emit("message", {
-      user: "admin",
+      user: "Admin",
       text: `A mighty ${chatUser.name} hoped into the room`,
+      time: getTime(),
     });
 
     socket.join(chatUser.room);
@@ -57,6 +78,7 @@ io.on("connection", (socket) => {
     io.to(chatUser.room).emit("message", {
       user: chatUser.name,
       text: message,
+      time: getTime(),
     });
     callback();
   });
@@ -160,8 +182,9 @@ io.on("connection", (socket) => {
         .emit("user left", socket.id.toString());
 
       io.to(userRemoved.room).emit("message", {
-        user: "admin",
+        user: "Admin",
         text: `${userRemoved.name} left the video call`,
+        time: getTime(),
       });
     }
   }
@@ -174,8 +197,9 @@ io.on("connection", (socket) => {
     const userRemoved = removeChatUser(socket.id);
     if (userRemoved) {
       socket.broadcast.to(userRemoved.room).emit("message", {
-        user: "admin",
+        user: "Admin",
         text: `Guys calm down, ${userRemoved.name} left the room`,
+        time: getTime(),
       });
       io.to(userRemoved.room).emit(
         "roomData",

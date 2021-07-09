@@ -6,6 +6,8 @@ import Controls from "../Controls/Controls";
 import { SocketContext } from "../../SocketContext.js";
 import Header from "../Header/Header";
 import ChatDrawer from "../ChatDrawer/ChatDrawer";
+const logo = require("../../static/microsoft_teams.png");
+
 /**
  * Set up the room and join room.
  * @param {*} props
@@ -72,6 +74,7 @@ const Room = (props) => {
       <Header />
       <div className="room__view">
         <ChatDrawer
+          className="chat__drawer"
           drawerOpen={drawerOpen}
           toggleDrawer={toggleDrawer}
           name={name}
@@ -83,11 +86,10 @@ const Room = (props) => {
         </div>
         {peers.length == 0 ? (
           <div className="room__empty">
-            <h1>
-              OMeet is better with friends
-              <br />
-              Invite friends to room <i>{roomID}</i>
-            </h1>
+            <img src={String(logo)} />
+            <p style={{ marginTop: "30px", fontSize: "1.25em" }}>
+              Ther's no one here...
+            </p>
           </div>
         ) : (
           <div className={"room__videoGrid type" + peers.length}>

@@ -1,5 +1,72 @@
 * {
-  font-family: "NexaBold";
+  font-family: "Segoe UI";
+  /* font-weight: bold; */
+}
+
+:root {
+  --TS2: #33344a;
+  --TS1: #464775;
+  --P: #6264a7;
+  --T1: #8b8cc7;
+  --T2: #bdbde6;
+  --T3: #e2e2f6;
+  --T4: #f4f4fc;
+}
+
+.backgroundTS2 {
+  background: var(--TS2);
+}
+
+.backgroundTS1 {
+  background: var(--TS1);
+}
+
+.backgroundP {
+  background: var(--P);
+}
+
+.backgroundT1 {
+  background: var(--T1);
+}
+
+.backgroundT2 {
+  background: var(--T2);
+}
+
+.backgroundT3 {
+  background: var(--T3);
+}
+
+.backgroundT4 {
+  background: var(--T4);
+}
+
+.colorTS2 {
+  color: var(--TS2);
+}
+
+.colorTS1 {
+  color: var(--TS1);
+}
+
+.colorP {
+  color: var(--P);
+}
+
+.colorT1 {
+  color: var(--T1);
+}
+
+.colorT2 {
+  color: var(--T2);
+}
+
+.colorT3 {
+  color: var(--T3);
+}
+
+.colorT4 {
+  color: var(--T4);
 }
 
 body {

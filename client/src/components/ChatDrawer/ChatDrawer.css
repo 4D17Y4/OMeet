@@ -4,11 +4,12 @@
   width: 30vw;
   flex-direction: column;
   justify-content: space-between;
-  background: #ffffff;
+  background: #faf9f8;
   transition: all 0.3s ease-in-out;
   transform: translate(-30vw);
   position: absolute;
   box-shadow: 4px 0 15px 3px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
 .Drawer__Container--isOpen {
@@ -22,7 +23,7 @@
   align-items: center;
   padding: 20px;
   font-size: 1.4em;
-  background: #f3f3f3;
+  background: var(--T3);
 }
 
 .closeIcon {

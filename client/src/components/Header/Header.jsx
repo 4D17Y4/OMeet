@@ -1,9 +1,14 @@
-import React from "react";
+// import React from "react";
 import "./Header.css";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import IconButton from "@material-ui/core/IconButton";
 import InfoIcon from "@material-ui/icons/Info";
-import HomeIcon from "@material-ui/icons/Home";
+import { initializeIcons } from "@fluentui/react";
+import { Icon } from "@fluentui/react/lib/Icon";
 import "../../font/font.css";
+
+initializeIcons();
 
 function Header() {
   function toggleInfo() {
@@ -15,9 +20,10 @@ function Header() {
   }
 
   return (
-    <div className="header">
+    <div className="header backgroundP colorT3">
       <IconButton>
-        <HomeIcon
+        <Icon
+          iconName="HomeSolid"
           fontSize="large"
           className="header__icon"
           onClick={toggleHome}
@@ -27,7 +33,8 @@ function Header() {
         <p align="center">OMeet</p>
       </div>
       <IconButton>
-        <InfoIcon
+        <Icon
+          iconName="InfoSolid"
           fontSize="large"
           className="header__icon"
           onClick={toggleInfo}

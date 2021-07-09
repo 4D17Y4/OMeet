@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { SocketContext } from "../../SocketContext.js";
 import SendIcon from "@material-ui/icons/Send";
 import IconButton from "@material-ui/core/IconButton";
+import { Icon } from "@fluentui/react/lib/Icon";
 import "./ChatInput.css";
 
 function ChatInput() {
@@ -19,16 +20,20 @@ function ChatInput() {
       <input
         className="input"
         type="text"
-        placeholder="Type a message..."
+        placeholder="Type a new message"
         value={message}
         onChange={({ target: { value } }) => setMessage(value)}
         onKeyPress={(event) => (event.key === "Enter" ? send(event) : null)}
       />
-      <button className="sendButton" onClick={(e) => send(e)}>
+      <button
+        className="sendButton"
+        style={{ background: "var(--T3)" }}
+        onClick={(e) => send(e)}
+      >
         <IconButton
           style={{ width: "100%", height: "100%", borderRadius: "8px" }}
         >
-          <SendIcon />
+          <Icon iconName="Send" style={{ fontSize: "1.2em" }} />
         </IconButton>
       </button>
     </form>

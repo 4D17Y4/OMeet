@@ -9,16 +9,7 @@ function Participants({ room, users }) {
       <div className="roomName">{room}</div>
       {users.map((user, i) => {
         return (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "15px",
-              fontSize: "1.3em",
-            }}
-          >
+          <div key={i} className="participantsName">
             {user.name}
           </div>
         );

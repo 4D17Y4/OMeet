@@ -7,10 +7,33 @@ import VideocamOffRoundedIcon from "@material-ui/icons/VideocamOffRounded";
 import VideocamRoundedIcon from "@material-ui/icons/VideocamRounded";
 import IconButton from "@material-ui/core/IconButton";
 import { SocketContext } from "../../SocketContext.js";
+import Switch from "@material-ui/core/Switch";
+import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+
+const PurpleSwitch = withStyles({
+  switchBase: {
+    color: "var(--T2)",
+    "&$checked": {
+      color: "var(--P)",
+    },
+    "&$checked + $track": {
+      backgroundColor: "var(--P)",
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 function UserVideo(props) {
-  const { userPreview, videoState, audioState, audioToggle, videoToggle } =
-    useContext(SocketContext);
+  const {
+    roomID,
+    userPreview,
+    videoState,
+    audioState,
+    audioToggle,
+    videoToggle,
+  } = useContext(SocketContext);
 
   useEffect(() => {
     console.log(props);
@@ -23,36 +46,47 @@ function UserVideo(props) {
         <video className="videoFrame__video" ref={userPreview} autoPlay />
         {props.showButtons ? (
           <div className="videoFrame__buttonContainer">
-            <IconButton>
-              {audioState ? (
-                <MicRoundedIcon
-                  onClick={audioToggle}
-                  className="videoFrame__muteMicrophone"
-                  style={{ fontSize: 40 }}
+            {/* <IconButton> */}
+            <div className="button__container">
+              <div className="toggle__container">
+                {audioState ? (
+                  <MicRoundedIcon onClick={audioToggle} />
+                ) : (
+                  <MicOffRoundedIcon onClick={audioToggle} />
+                )}
+                <PurpleSwitch
+                  checked={audioState}
+                  onChange={audioToggle}
+                  name="checkedC"
                 />
-              ) : (
-                <MicOffRoundedIcon
-                  onClick={audioToggle}
-                  className="videoFrame__onMicrophone"
-                  style={{ fontSize: 40 }}
+              </div>
+              <div className="toggle__container">
+                {/* </IconButton> */}
+                {videoState ? (
+                  <VideocamRoundedIcon onClick={videoToggle} />
+                ) : (
+                  <VideocamOffRoundedIcon onClick={videoToggle} />
+                )}
+                <PurpleSwitch
+                  checked={videoState}
+                  onChange={videoToggle}
+                  name="checkedC"
                 />
-              )}
-            </IconButton>
-            <IconButton>
-              {videoState ? (
-                <VideocamRoundedIcon
-                  onClick={videoToggle}
-                  className="videoFrame__muteCamera"
-                  style={{ fontSize: 40 }}
-                />
-              ) : (
-                <VideocamOffRoundedIcon
-                  onClick={videoToggle}
-                  className="videoFrame__onCamera"
-                  style={{ fontSize: 40 }}
-                />
-              )}
-            </IconButton>
+              </div>
+            </div>
+            <Link
+              style={{ height: "40px" }}
+              to={{
+                pathname: `/room/${roomID}`,
+              }}
+            >
+              <button
+                style={{ position: "absolute", right: "5px" }}
+                className="joinRoom__button"
+              >
+                Join
+              </button>
+            </Link>
           </div>
         ) : null}
       </div>

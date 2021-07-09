@@ -22,8 +22,10 @@ function CreateRoom(props) {
 
   const onBackButtonEvent = (e) => {
     e.preventDefault();
-    userPreview.current.srcObject.getVideoTracks()[0].stop();
-    userPreview.current.srcObject.getVideoTracks()[0].stop();
+    if (userPreview.current) {
+      userPreview.current.srcObject.getVideoTracks()[0].stop();
+      userPreview.current.srcObject.getVideoTracks()[0].stop();
+    }
     props.history.push(`/chat/${roomID}`);
   };
 
@@ -55,51 +57,12 @@ function CreateRoom(props) {
   return (
     <div className="view">
       <Header />
-      <Grid container className="createRoom">
-        <Grid item md={6} className="createRoom__item">
-          <div className="createRoom__userPreview">
-            <div className="userPreview__wrapper">
-              <UserVideo showButtons={true} />
-            </div>
-          </div>
-        </Grid>
-        <Grid item md={6} className="createRoom__item">
-          <div className="createRoom__form">
-            <div className="form__wrapper">
-              <TextField
-                label="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                fullWidth
-              />
-              <TextField
-                style={{ marginTop: "10px" }}
-                label="Room ID"
-                value={roomID}
-                onChange={(e) => setRoomID(e.target.value)}
-                fullWidth
-              />
-              <div className="form__submit">
-                <Link
-                  onClick={(event) =>
-                    !name || !roomID ? event.preventDefault() : null
-                  }
-                  to={{
-                    pathname: `/room/${roomID}`,
-                    state: { userName: name },
-                    videoState,
-                    audioState,
-                  }}
-                >
-                  <Button variant="contained" color="primary">
-                    Join
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </Grid>
-      </Grid>
+      <div container className="createRoom">
+        <div className="userPreview__wrapper">
+          <UserVideo showButtons={true} />
+        </div>
+      </div>
+      <div className="bottom__empty" />
     </div>
   );
 }

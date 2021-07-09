@@ -4,15 +4,17 @@
   justify-content: space-between;
   height: calc(8vh - 5px);
   z-index: 10;
-  border-bottom: 5px solid #f9f9f9;
+  border-bottom: 5px solid var(--P);
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.178);
 }
 
 .header__name {
+  font-weight: bold;
   object-fit: contain;
   font-size: 25px;
 }
 
 .header__icon {
   padding: 14px;
+  color: var(--T3);
 }

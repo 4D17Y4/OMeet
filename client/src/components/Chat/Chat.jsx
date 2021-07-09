@@ -4,7 +4,6 @@ import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
 import { SocketContext } from "../../SocketContext.js";
 import Participants from "../Participants/Participants";
-import { browserHistory } from "react-router";
 
 function Chat() {
   const {
@@ -18,8 +17,10 @@ function Chat() {
   } = useContext(SocketContext);
 
   useEffect(() => {
-    joinRoom();
-    joinChatRoom();
+    if (!socketRef.current) {
+      joinRoom();
+      joinChatRoom();
+    }
   }, []);
 
   return (
