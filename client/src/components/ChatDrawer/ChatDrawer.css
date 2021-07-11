@@ -1,6 +1,6 @@
 .Drawer__Container {
   display: flex;
-  height: 84vh;
+  height: 86vh;
   width: 30vw;
   flex-direction: column;
   justify-content: space-between;
@@ -22,11 +22,11 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  font-size: 1.4em;
+  font-size: 1.1em;
   background: var(--T3);
 }
 
-.closeIcon {
+.Drawer__closeIcon {
   position: absolute;
   right: 20px;
 }

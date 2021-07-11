@@ -16,8 +16,6 @@ function ParticipantVideo(props, key) {
   const [videoState, setVideoState] = useState(props.videoState);
   const [audioState, setAudioState] = useState(props.audioState);
   const [name, setNameState] = useState(props.name);
-  const [width, setWidthState] = useState();
-  const [height, setHeightState] = useState();
   const [className, setClassName] = useState("videoOff");
 
   /**
@@ -54,7 +52,7 @@ function ParticipantVideo(props, key) {
         setClassName("videoOff");
       }
     });
-  }, []);
+  }, [props.peer, videoState]);
 
   return (
     <div className={"videoContainer " + className}>

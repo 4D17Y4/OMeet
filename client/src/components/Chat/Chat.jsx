@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "./Chat.css";
 import ChatMessages from "../ChatMessages/ChatMessages";
 import ChatInput from "../ChatInput/ChatInput";
@@ -17,16 +17,16 @@ function Chat() {
   } = useContext(SocketContext);
 
   useEffect(() => {
-    if (!socketRef.current) {
+    if (!socketRef.current && name !== "") {
       joinRoom();
       joinChatRoom();
     }
-  }, []);
+  }, [name, joinRoom, joinChatRoom, socketRef]);
 
   return (
-    <div className="outerContainer">
+    <div className="chat">
       <Participants users={chatUsers} room={roomID} />
-      <div className="container">
+      <div className="chat__container">
         <ChatMessages messages={messages} name={name} />
         <ChatInput />
       </div>

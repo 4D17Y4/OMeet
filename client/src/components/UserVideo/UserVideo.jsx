@@ -1,11 +1,9 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import Cookies from "universal-cookie";
+import React, { useContext } from "react";
 import "./UserVideo.css";
 import MicOffRoundedIcon from "@material-ui/icons/MicOffRounded";
 import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import VideocamOffRoundedIcon from "@material-ui/icons/VideocamOffRounded";
 import VideocamRoundedIcon from "@material-ui/icons/VideocamRounded";
-import IconButton from "@material-ui/core/IconButton";
 import { SocketContext } from "../../SocketContext.js";
 import Switch from "@material-ui/core/Switch";
 import { withStyles } from "@material-ui/core/styles";
@@ -35,15 +33,10 @@ function UserVideo(props) {
     videoToggle,
   } = useContext(SocketContext);
 
-  useEffect(() => {
-    console.log(props);
-    console.log(props.showButtons);
-  }, []);
-
   return (
     <div className="userFloating">
       <div className="videoFrame">
-        <video className="videoFrame__video" ref={userPreview} autoPlay />
+        <video muted className="videoFrame__video" ref={userPreview} autoPlay />
         {props.showButtons ? (
           <div className="videoFrame__buttonContainer">
             {/* <IconButton> */}

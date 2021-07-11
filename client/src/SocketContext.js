@@ -5,7 +5,6 @@ import Peer from "simple-peer";
 const SocketContext = createContext();
 
 /**
- *
  * Socket context provider.
  * @returns
  */
@@ -74,14 +73,12 @@ const ContextProvider = ({ children }) => {
   }
 
   function initSocket() {
-    console.log("initSocketCalled");
-    socketRef.current = io.connect("/");
+    socketRef.current = io("https://o-meet.herokuapp.com/");
     setId(socketRef.current.id);
     setSocket(socketRef.current);
   }
 
   function joinChatRoom() {
-    console.log("join chat");
     socketRef.current.emit("join chat", { name, room: roomID });
   }
 
@@ -94,14 +91,12 @@ const ContextProvider = ({ children }) => {
    */
   function joinVideoChat() {
     userPreview.current.srcObject = userStream;
-    console.log("join video chat " + roomID + " " + name);
     socketRef.current.emit("join room", {
       roomID,
       name,
       videoState,
       audioState,
     });
-    console.log("join video chat after" + roomID + " " + name);
   }
 
   const initUserPreview = async () => {
@@ -201,7 +196,6 @@ const ContextProvider = ({ children }) => {
     });
 
     socketRef.current.on("cleanUser", () => {
-      console.log("clean User called " + socketRef.current.id);
       endVideoCall();
       endCall();
     });

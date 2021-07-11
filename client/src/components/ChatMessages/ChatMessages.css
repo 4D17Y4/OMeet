@@ -1,4 +1,4 @@
-.messages {
+.messages__container {
   overflow: auto;
   flex: auto;
   padding: 1.5vw;

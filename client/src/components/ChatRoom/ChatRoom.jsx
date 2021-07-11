@@ -7,22 +7,8 @@ import { SocketContext } from "../../SocketContext.js";
 function ChatRoom(props) {
   const { endCall, name } = useContext(SocketContext);
 
-  const onBackButtonEvent = (e) => {
-    e.preventDefault();
-    if (
-      window.confirm(
-        "Are you sure ? You will leave the room, you can join as a new member."
-      )
-    ) {
-      endCall();
-      props.history.push("/");
-    } else {
-      window.history.pushState(null, null, window.location.pathname);
-    }
-  };
-
   useEffect(() => {
-    if (!name) {
+    if (!name || name === "") {
       props.history.push("/");
       return;
     }
@@ -36,13 +22,27 @@ function ChatRoom(props) {
       return "";
     };
 
+    const onBackButtonEvent = (e) => {
+      e.preventDefault();
+      if (
+        window.confirm(
+          "Are you sure ? You will leave the room, you can join as a new member."
+        )
+      ) {
+        endCall();
+        props.history.push("/");
+      } else {
+        window.history.pushState(null, null, window.location.pathname);
+      }
+    };
+
     window.history.pushState(null, null, window.location.pathname);
     window.addEventListener("popstate", onBackButtonEvent);
     return () => {
       window.removeEventListener("popstate", onBackButtonEvent);
       window.onbeforeunload = null;
     };
-  }, []);
+  }, [name, props.history, endCall]);
 
   return (
     <div>

@@ -1,33 +1,12 @@
-import React, { useContext, useState, useRef, useEffect } from "react";
-import { v1 as uuid } from "uuid";
-import { Button, TextField, Grid } from "@material-ui/core";
+import React, { useContext, useEffect } from "react";
 import "./CreateRoom.css";
 import UserVideo from "../UserVideo/UserVideo";
 import Header from "../Header/Header";
-import { Link } from "react-router-dom";
 import { SocketContext } from "../../SocketContext.js";
 
 function CreateRoom(props) {
-  const {
-    initUserPreview,
-    videoState,
-    audioState,
-    roomID,
-    setRoomID,
-    name,
-    userPreview,
-    socketRef,
-    setName,
-  } = useContext(SocketContext);
-
-  const onBackButtonEvent = (e) => {
-    e.preventDefault();
-    if (userPreview.current) {
-      userPreview.current.srcObject.getVideoTracks()[0].stop();
-      userPreview.current.srcObject.getVideoTracks()[0].stop();
-    }
-    props.history.push(`/chat/${roomID}`);
-  };
+  const { initUserPreview, roomID, userPreview, socketRef } =
+    useContext(SocketContext);
 
   useEffect(() => {
     if (!socketRef.current) {
@@ -45,6 +24,15 @@ function CreateRoom(props) {
       return "";
     };
 
+    const onBackButtonEvent = (e) => {
+      e.preventDefault();
+      if (userPreview.current) {
+        userPreview.current.srcObject.getVideoTracks()[0].stop();
+        userPreview.current.srcObject.getVideoTracks()[0].stop();
+      }
+      props.history.push(`/chat/${roomID}`);
+    };
+
     window.history.pushState(null, null, window.location.pathname);
     window.addEventListener("popstate", onBackButtonEvent);
 
@@ -52,12 +40,12 @@ function CreateRoom(props) {
       window.onbeforeunload = null;
       window.removeEventListener("popstate", onBackButtonEvent);
     };
-  }, []);
+  }, [props.history, roomID]);
 
   return (
     <div className="view">
       <Header />
-      <div container className="createRoom">
+      <div className="createRoom">
         <div className="userPreview__wrapper">
           <UserVideo showButtons={true} />
         </div>

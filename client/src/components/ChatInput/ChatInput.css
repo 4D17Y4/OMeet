@@ -1,15 +1,15 @@
-.form {
+.chatInput {
   display: flex;
 }
 
-.input {
+.chatInput__message {
   border: 0;
   border-bottom: 3px solid var(--P);
   border-radius: 8px;
   padding: 15px 20px;
-  margin: 1.5vw;
-  width: 80vw;
-  font-size: 1.2em;
+  margin: 1vw;
+  width: 90%;
+  font-size: 1em;
 }
 
 input:focus,
@@ -18,10 +18,11 @@ select:focus {
   outline: none;
 }
 
-.sendButton {
-  margin: 1.5vw;
+.chatInput__send {
+  margin: 1vw;
   margin-left: 0;
   border: none;
   border-radius: 8px;
+  width: 10%;
   padding: 0;
 }

@@ -9,35 +9,35 @@ function ChatMessage({ message, name }) {
   }
 
   return myMessage ? (
-    <div className="messageContainer justifyEnd">
-      <div className="messageBox backgroundT3">
-        <div className="head">
-          <p className="sentText pr-10">{message.user}</p>
+    <div className="message justifyEnd">
+      <div className="message__container backgroundT3">
+        <div className="message__head">
+          <p className="head__text pr-10">{message.user}</p>
           <p
-            style={{ padding: "0", fontWeight: "400", fontSize: "0.9em" }}
-            className="sentText pr-10"
+            style={{ padding: "0", fontWeight: "400", fontSize: "0.8em" }}
+            className="head__text pr-10"
           >
             {message.time}
           </p>
         </div>
-        <p className="messageText colorDark">
+        <p className="message__text colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
       </div>
     </div>
   ) : (
-    <div className="messageContainer justifyStart">
-      <div className="messageBox backgroundWhite">
-        <div className="head">
-          <p className="sentText pr-10">{message.user}</p>
+    <div className="message justifyStart">
+      <div className="message__container backgroundWhite">
+        <div className="message__head">
+          <p className="head__text pr-10">{message.user}</p>
           <p
             style={{ padding: "0", fontWeight: "400" }}
-            className="sentText pr-10"
+            className="head__text pr-10"
           >
             {message.time}
           </p>
         </div>
-        <p className="messageText colorDark">
+        <p className="message__text colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
       </div>

@@ -3,13 +3,12 @@ import "./Participants.css";
 import "./Participants.css";
 
 function Participants({ room, users }) {
-  console.log(users);
   return (
-    <div className="participants">
-      <div className="roomName">{room}</div>
+    <div className="participants__container">
+      <div className="participants__head">{room}</div>
       {users.map((user, i) => {
         return (
-          <div key={i} className="participantsName">
+          <div key={i} className="participants__name">
             {user.name}
           </div>
         );

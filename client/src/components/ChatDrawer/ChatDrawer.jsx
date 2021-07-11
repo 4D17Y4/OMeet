@@ -14,12 +14,12 @@ function ChatDrawer({ drawerOpen, toggleDrawer, name, messages, room }) {
     >
       <div className="Drawer__roomName">
         {room}
-        <IconButton className="closeIcon" style={{ position: "absolute" }}>
-          <CloseIcon
-            onClick={toggleDrawer}
-            className="control__button"
-            fontSize="large"
-          />
+        <IconButton
+          onClick={toggleDrawer}
+          className="Drawer__closeIcon"
+          style={{ position: "absolute" }}
+        >
+          <CloseIcon className="control__button" fontSize="large" />
         </IconButton>
       </div>
       <ChatMessages messages={messages} name={name} />

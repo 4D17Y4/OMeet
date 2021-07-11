@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { SocketContext } from "../../SocketContext.js";
-import SendIcon from "@material-ui/icons/Send";
 import IconButton from "@material-ui/core/IconButton";
 import { Icon } from "@fluentui/react/lib/Icon";
 import "./ChatInput.css";
@@ -16,26 +15,26 @@ function ChatInput() {
   };
 
   return (
-    <form className="form">
+    <form className="chatInput">
       <input
-        className="input"
+        className="chatInput__message"
         type="text"
         placeholder="Type a new message"
         value={message}
         onChange={({ target: { value } }) => setMessage(value)}
         onKeyPress={(event) => (event.key === "Enter" ? send(event) : null)}
       />
-      <button
-        className="sendButton"
+      <div
+        className="chatInput__send"
         style={{ background: "var(--T3)" }}
         onClick={(e) => send(e)}
       >
         <IconButton
           style={{ width: "100%", height: "100%", borderRadius: "8px" }}
         >
-          <Icon iconName="Send" style={{ fontSize: "1.2em" }} />
+          <Icon iconName="Send" />
         </IconButton>
-      </button>
+      </div>
     </form>
   );
 }

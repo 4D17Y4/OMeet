@@ -1,11 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import "./Home.css";
 import Header from "../Header/Header";
-// import "../CreateRoom/CreateRoom.css";
-import { Button, TextField, Grid } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { SocketContext } from "../../SocketContext.js";
 import { v4 as uuidv4 } from "uuid";
+
 const logo = require("../../static/microsoft_teams.png");
 
 function Home() {
@@ -13,11 +12,12 @@ function Home() {
 
   return (
     <div>
+      {/* <Info /> */}
       <Header />
       <div className="joinRoom">
         <div className="joinRoom__form">
           <div className="joinRoom__image">
-            <img src={String(logo)} />
+            <img alt="error not found" height="100%" src={String(logo)} />
           </div>
           <div className="joinRoomform__wrapper">
             <input
@@ -26,7 +26,6 @@ function Home() {
               placeholder="What should we call you"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              fullWidth
             />
             <input
               className="input__field"
@@ -35,16 +34,16 @@ function Home() {
               placeholder="Room id"
               value={roomID}
               onChange={(e) => setRoomID(e.target.value)}
-              fullWidth
             />
             <div className="joinRoomform__submit">
-              <Link
+              <button
                 onClick={() => {
                   setRoomID(uuidv4());
                 }}
+                className="joinRoom__button"
               >
-                <button className="joinRoom__button">Generate</button>
-              </Link>
+                Generate
+              </button>
               <Link
                 onClick={(event) =>
                   !name || !roomID ? event.preventDefault() : null

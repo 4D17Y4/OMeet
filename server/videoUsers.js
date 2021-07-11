@@ -1,7 +1,6 @@
 const videoUsers = [];
 
 const addVideoUser = ({ id, name, room, videoState, audioState }) => {
-  console.log(videoUsers);
   const userExist = videoUsers.find(
     (user) => user.room === room && user.id === id
   );
@@ -16,14 +15,11 @@ const addVideoUser = ({ id, name, room, videoState, audioState }) => {
 
   const videoUser = { id, name, room, videoState, audioState };
   videoUsers.push(videoUser);
-  console.log(videoUsers);
 
   return { videoUser };
 };
 
 const updateVideoUser = ({ id, room, videoState, audioState }) => {
-  console.log("updateVideoUser", id, room, videoState, audioState);
-  console.log(videoUsers);
   for (var user in videoUsers) {
     if (videoUsers[user].id === id) {
       videoUsers[user].room = room;
@@ -32,7 +28,6 @@ const updateVideoUser = ({ id, room, videoState, audioState }) => {
       break;
     }
   }
-  console.log(videoUsers);
 };
 
 const removeVideoUser = (id) => {

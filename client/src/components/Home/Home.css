@@ -1,6 +1,6 @@
 .joinRoom {
   margin: 0;
-  height: 87vh;
+  height: 89vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -47,7 +47,7 @@
   padding: 10px 20px;
   margin: 10px 0;
   width: calc(100% - 40px);
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: normal;
 }
 

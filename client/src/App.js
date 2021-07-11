@@ -5,6 +5,9 @@ import Home from "./components/Home/Home";
 import Room from "./components/Room/Room";
 import "./App.css";
 import ChatRoom from "./components/ChatRoom/ChatRoom";
+import { initializeIcons } from "@fluentui/react";
+
+initializeIcons();
 
 function App() {
   return (

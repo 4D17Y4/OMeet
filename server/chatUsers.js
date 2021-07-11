@@ -1,8 +1,6 @@
 const chatUsers = [];
 
 const addChatUser = ({ id, name, room }) => {
-  console.log("adding chat user");
-  console.log(chatUsers);
   const userExist = chatUsers.find(
     (user) => user.room === room && user.id === id
   );
@@ -13,7 +11,6 @@ const addChatUser = ({ id, name, room }) => {
 
   const chatUser = { id, name, room };
   chatUsers.push(chatUser);
-  console.log(chatUsers);
   return { chatUser };
 };
 

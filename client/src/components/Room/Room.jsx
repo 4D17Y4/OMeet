@@ -25,27 +25,15 @@ const Room = (props) => {
   } = useContext(SocketContext);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const onBackButtonEvent = (e) => {
-    e.preventDefault();
-    if (
-      window.confirm(
-        "Are you sure ? You will leave the video room and will be redirected to the chat."
-      )
-    ) {
-      endVideoCall();
-      props.history.push(`/chat/${roomID}`);
-    } else {
-      window.history.pushState(null, null, window.location.pathname);
-    }
-  };
-
   useEffect(() => {
-    if (!socketRef.current) {
+    if (!socketRef.current || name === "") {
       props.history.push("/");
       return;
     }
 
-    joinVideoChat();
+    if (name !== "") {
+      joinVideoChat();
+    }
 
     window.onbeforeunload = (event) => {
       const e = event || window.event;
@@ -54,6 +42,20 @@ const Room = (props) => {
         e.returnValue = "";
       }
       return "";
+    };
+
+    const onBackButtonEvent = (e) => {
+      e.preventDefault();
+      if (
+        window.confirm(
+          "Are you sure ? You will leave the video room and will be redirected to the chat."
+        )
+      ) {
+        endVideoCall();
+        props.history.push(`/chat/${roomID}`);
+      } else {
+        window.history.pushState(null, null, window.location.pathname);
+      }
     };
 
     window.history.pushState(null, null, window.location.pathname);
@@ -84,11 +86,11 @@ const Room = (props) => {
         <div className="room__videoWrapper">
           <UserVideo showButtons={false} />
         </div>
-        {peers.length == 0 ? (
+        {peers.length === 0 ? (
           <div className="room__empty">
-            <img src={String(logo)} />
+            <img alt="failed to load" src={String(logo)} />
             <p style={{ marginTop: "30px", fontSize: "1.25em" }}>
-              Ther's no one here...
+              There's no one here...
             </p>
           </div>
         ) : (

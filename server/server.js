@@ -1,10 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
+const router = require("./router");
+const cors = require("cors");
+const socket = require("socket.io");
+
 const app = express();
 const server = http.createServer(app);
-const socket = require("socket.io");
 const io = socket(server);
+
+app.use(cors());
+app.use(router);
+
 const {
   addChatUser,
   removeChatUser,
@@ -42,8 +49,6 @@ function getTime() {
 
 // On socket connction.
 io.on("connection", (socket) => {
-  console.log("connected " + socket.id);
-
   socket.on("join chat", (payload) => {
     const { error, chatUser } = addChatUser({
       id: socket.id,
@@ -66,15 +71,11 @@ io.on("connection", (socket) => {
     });
 
     socket.join(chatUser.room);
-
-    console.log("sending room data...");
-    console.log(getChatUsersInRoom(chatUser.room));
     io.to(chatUser.room).emit("roomData", getChatUsersInRoom(chatUser.room));
   });
 
   socket.on("sendMessage", (message, callback) => {
     const chatUser = getChatUser(socket.id);
-    console.log("sendMessage");
     io.to(chatUser.room).emit("message", {
       user: chatUser.name,
       text: message,
@@ -92,8 +93,6 @@ io.on("connection", (socket) => {
    * - audioState (current audio state of the user)
    */
   socket.on("join room", (payload) => {
-    console.log("user joining");
-    console.log(payload);
     const { error, videoUser } = addVideoUser({
       id: socket.id,
       name: payload.name,

@@ -1,4 +1,4 @@
-.participants {
+.participants__container {
   width: 20%;
   height: 100%;
   background: #faf9f8;
@@ -7,23 +7,24 @@
   overflow-y: auto;
 }
 
-.roomName {
+.participants__head {
   font-weight: bold;
   margin-top: 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 30px;
-  font-size: 1.4em;
+  padding: 12px 20px;
+  font-size: 1.1em;
   border-bottom: 1px solid #e1dfdd;
-  color: var(--ST2);
+  color: var(--TS1);
+  background: var(--T3);
 }
 
-.participantsName {
+.participants__name {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   font-weight: normal;
   padding: 15px 30px;
-  font-size: 1.2em;
+  font-size: 1em;
 }

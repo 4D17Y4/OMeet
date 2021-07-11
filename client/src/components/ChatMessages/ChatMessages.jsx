@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ChatMessage from "../ChatMessage/ChatMessage";
-import { SocketContext } from "../../SocketContext.js";
 import "./ChatMessages.css";
 function ChatMessages({ messages, name }) {
   return (
-    <ScrollToBottom className="messages">
+    <ScrollToBottom className="messages__container">
       {messages.map((message, i) => {
         return (
           <div key={i}>

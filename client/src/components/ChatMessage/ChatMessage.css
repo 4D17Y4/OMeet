@@ -1,43 +1,44 @@
-.messageBox {
+.message__container {
   background: #f3f3f3;
   border-radius: 6px;
-  padding: 20px 20px;
+  padding: 15px;
   color: white;
   display: inline-block;
   max-width: 80%;
   min-width: 180px;
 }
 
-.messageText {
+.message__text {
   width: 100%;
   letter-spacing: 0;
   float: left;
-  font-size: 1.1em;
+  font-size: 1em;
   margin: 0;
   padding-top: 5px;
   word-wrap: break-word;
   font-weight: normal;
 }
 
-.messageContainer {
+.message {
   display: flex;
   justify-content: flex-end;
   padding: 0 2%;
   margin-top: 5px;
 }
 
-.head {
+.message__head {
   display: flex;
   justify-content: space-between;
 }
 
-.sentText {
+.head__text {
   margin: 0;
   display: flex;
   align-items: center;
   font-weight: 500;
   color: var(--TS2);
   letter-spacing: 0.3px;
+  font-size: 0.8em;
 }
 
 .pl-10 {
