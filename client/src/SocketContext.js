@@ -12,13 +12,13 @@ const ContextProvider = ({ children }) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [peers, setPeers] = useState([]);
+  const [socket, setSocket] = useState();
   const [roomID, setRoomID] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [userStream, setUserStream] = useState();
   const [videoState, setVideoState] = useState(true);
   const [audioState, setAudioState] = useState(true);
-  const [socket, setSocket] = useState();
   const [chatUsers, setChatUsers] = useState([]);
 
   const socketRef = useRef();
@@ -67,21 +67,34 @@ const ContextProvider = ({ children }) => {
     sendUpdate(videoState, !audioState);
   }
 
+  /**
+   * Join Room, initialises the socket and room.
+   */
   function joinRoom() {
     initSocket();
     initRoom();
   }
 
+  /**
+   * Connect socket, setup id and socket.
+   */
   function initSocket() {
     socketRef.current = io("https://o-meet.herokuapp.com/");
     setId(socketRef.current.id);
     setSocket(socketRef.current);
   }
 
+  /**
+   * Join chat room with name and room
+   */
   function joinChatRoom() {
     socketRef.current.emit("join chat", { name, room: roomID });
   }
 
+  /**
+   * Send chat message inside the room.
+   * @param {*} message
+   */
   function sendMessage(message) {
     socketRef.current.emit("sendMessage", message, () => setMessage(""));
   }
@@ -99,6 +112,9 @@ const ContextProvider = ({ children }) => {
     });
   }
 
+  /**
+   * Initailises the user preview for the video call.
+   */
   const initUserPreview = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: { aspectRatio: 1.5 },
@@ -230,6 +246,9 @@ const ContextProvider = ({ children }) => {
     return peer;
   }
 
+  /**
+   * Cleanup function on video call end.
+   */
   function endVideoCall() {
     setPeers([]);
     userStream.getAudioTracks().forEach((track) => {
@@ -243,6 +262,9 @@ const ContextProvider = ({ children }) => {
     socketRef.current.emit("videoCallEnded");
   }
 
+  /**
+   * End the call ie leave the room.
+   */
   function endCall() {
     setMessages([]);
     setChatUsers([]);
@@ -293,12 +315,14 @@ const ContextProvider = ({ children }) => {
         peers,
         socket,
         roomID,
-        joinRoom,
+        endCall,
         setName,
         message,
         messages,
+        joinRoom,
         socketRef,
         setRoomID,
+        chatUsers,
         setMessage,
         audioState,
         videoState,
@@ -314,8 +338,6 @@ const ContextProvider = ({ children }) => {
         joinVideoChat,
         endVideoCall,
         initUserPreview,
-        chatUsers,
-        endCall,
       }}
     >
       {children}

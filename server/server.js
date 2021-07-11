@@ -23,11 +23,11 @@ const {
   addVideoUser,
   removeVideoUser,
   getVideoUser,
-  getVideoUsersInRoom,
   updateVideoUser,
   getVideoParticipantsInRoom,
 } = require("./videoUsers.js");
 
+// returns the current time in day HH:MM format.
 function getTime() {
   const date = new Date();
   var hours = date.getHours();
@@ -49,7 +49,16 @@ function getTime() {
 
 // On socket connction.
 io.on("connection", (socket) => {
+  /**
+   * On join chat.
+   * Add the chat user to the users array.
+   * Emit a welcome message to the user.
+   * Notify the users in the room that the user has joined the room.
+   * Join room and send the room data (participants) to the user.
+   *
+   */
   socket.on("join chat", (payload) => {
+    // add user
     const { error, chatUser } = addChatUser({
       id: socket.id,
       name: payload.name,
@@ -58,22 +67,29 @@ io.on("connection", (socket) => {
     if (error) {
       return;
     }
+
+    // welcome message.
     socket.emit("message", {
       user: "Admin",
       text: `${chatUser.name} welcome to the room ${chatUser.room}`,
       time: getTime(),
     });
 
+    // notify users.
     socket.broadcast.to(chatUser.room).emit("message", {
       user: "Admin",
       text: `A mighty ${chatUser.name} hoped into the room`,
       time: getTime(),
     });
 
+    // join user, send updated participants.
     socket.join(chatUser.room);
     io.to(chatUser.room).emit("roomData", getChatUsersInRoom(chatUser.room));
   });
 
+  /**
+   * On sending message find the user from socket and emit the message to specific room.
+   */
   socket.on("sendMessage", (message, callback) => {
     const chatUser = getChatUser(socket.id);
     io.to(chatUser.room).emit("message", {
@@ -91,6 +107,10 @@ io.on("connection", (socket) => {
    * - name (user name)
    * - videoState (current video state of the user)
    * - audioState (current audio state of the user)
+   *
+   * Add video user.
+   * Return video participants in the room to the newly joined user.
+   *
    */
   socket.on("join room", (payload) => {
     const { error, videoUser } = addVideoUser({
@@ -109,8 +129,6 @@ io.on("connection", (socket) => {
       "all users",
       getVideoParticipantsInRoom(payload.roomID, socket.id)
     );
-
-    socket.join(payload.roomID);
   });
 
   /**
@@ -121,6 +139,8 @@ io.on("connection", (socket) => {
    * - name (user name)
    * - videoState (user current video state)
    * - audioState (user current audio state)
+   *
+   * Get the user's room and send the signal to the user to signal.
    */
   socket.on("sending signal", (payload) => {
     const user = getVideoUser(payload.callerID);
@@ -137,6 +157,8 @@ io.on("connection", (socket) => {
    * returning the signal to complete shakehand.
    * @param {payload}
    * - signal (user signal)
+   *
+   * Send the returning signal to the client.
    */
   socket.on("returning signal", (payload) => {
     io.to(payload.callerID).emit("receiving returned signal", {
@@ -151,6 +173,9 @@ io.on("connection", (socket) => {
    * - roomId (room Id of the user stream)
    * - videoState (updated video state)
    * - audioState (updated audio state)
+   *
+   * Update the current state in video users
+   * Broadcast the update.
    */
   socket.on("user updated", (payload) => {
     // update the user attributes in user list.
@@ -169,10 +194,21 @@ io.on("connection", (socket) => {
     });
   });
 
+  /**
+   * On video call ended, end the video call from server end.
+   */
   socket.on("videoCallEnded", () => {
     endVideoCall();
   });
 
+  /**
+   * On end video call
+   *
+   * Remove the user from the video users.
+   * Broadcast that the user left.
+   * Update the users in room through an admin message.
+   *
+   */
   function endVideoCall() {
     const userRemoved = removeVideoUser(socket.id);
     if (userRemoved) {
@@ -188,10 +224,21 @@ io.on("connection", (socket) => {
     }
   }
 
+  /**
+   * On leaving room
+   */
   socket.on("leaveRoom", () => {
     leaveRoom();
   });
 
+  /**
+   * On leave room
+   *
+   * Remove the user from the chat room.
+   * Broadcast the user removed message.
+   * Update the room participants.
+   *
+   */
   function leaveRoom() {
     const userRemoved = removeChatUser(socket.id);
     if (userRemoved) {
@@ -209,7 +256,10 @@ io.on("connection", (socket) => {
   }
 
   /**
-   * Handle user disconnect
+   * Handle user disconnect.
+   *
+   * End video call.
+   * Leave the room.
    */
   socket.on("disconnect", () => {
     socket.emit("cleanUser");
