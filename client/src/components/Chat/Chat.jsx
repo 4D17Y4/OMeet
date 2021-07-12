@@ -17,11 +17,12 @@ function Chat() {
   } = useContext(SocketContext);
 
   useEffect(() => {
-    if (!socketRef.current && name !== "") {
+    console.log(socketRef, name, roomID);
+    if (name !== "") {
       joinRoom();
       joinChatRoom();
     }
-  }, [name, joinRoom, joinChatRoom, socketRef]);
+  }, [name]);
 
   return (
     <div className="chat">

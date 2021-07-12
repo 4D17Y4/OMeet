@@ -7,7 +7,12 @@ const socket = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = socket(server);
+const io = socket(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 app.use(cors());
 app.use(router);
@@ -59,6 +64,7 @@ io.on("connection", (socket) => {
    */
   socket.on("join chat", (payload) => {
     // add user
+    console.log("join chat", payload);
     const { error, chatUser } = addChatUser({
       id: socket.id,
       name: payload.name,
@@ -124,6 +130,12 @@ io.on("connection", (socket) => {
     if (error) {
       return;
     }
+
+    socket.broadcast.to(videoUser.room).emit("message", {
+      user: "Admin",
+      text: `${videoUser.name} joined the video call`,
+      time: getTime(),
+    });
 
     socket.emit(
       "all users",
@@ -244,7 +256,7 @@ io.on("connection", (socket) => {
     if (userRemoved) {
       socket.broadcast.to(userRemoved.room).emit("message", {
         user: "Admin",
-        text: `Guys calm down, ${userRemoved.name} left the room`,
+        text: `${userRemoved.name} left the room`,
         time: getTime(),
       });
       io.to(userRemoved.room).emit(
@@ -252,6 +264,7 @@ io.on("connection", (socket) => {
         getChatUsersInRoom(userRemoved.room)
       );
       socket.leave(userRemoved.room);
+      console.log("left");
     }
   }
 

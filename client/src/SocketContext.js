@@ -79,7 +79,7 @@ const ContextProvider = ({ children }) => {
    * Connect socket, setup id and socket.
    */
   function initSocket() {
-    socketRef.current = io("https://o-meet.herokuapp.com/");
+    socketRef.current = io("https://o-meet-server-2.herokuapp.com/");
     setId(socketRef.current.id);
     setSocket(socketRef.current);
   }
