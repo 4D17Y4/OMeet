@@ -10,6 +10,7 @@ function ChatInput() {
   const send = (event) => {
     event.preventDefault();
     if (message) {
+      // saftey check for undefined messages.
       sendMessage(message);
     }
   };
@@ -24,14 +25,8 @@ function ChatInput() {
         onChange={({ target: { value } }) => setMessage(value)}
         onKeyPress={(event) => (event.key === "Enter" ? send(event) : null)}
       />
-      <div
-        className="chatInput__send"
-        style={{ background: "var(--T3)" }}
-        onClick={(e) => send(e)}
-      >
-        <IconButton
-          style={{ width: "100%", height: "100%", borderRadius: "8px" }}
-        >
+      <div className="chatInput__send">
+        <IconButton onClick={(e) => send(e)}>
           <Icon iconName="Send" />
         </IconButton>
       </div>

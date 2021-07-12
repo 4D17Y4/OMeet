@@ -5,11 +5,11 @@
 .chatInput__message {
   border: 0;
   border-bottom: 3px solid var(--P);
-  border-radius: 8px;
-  padding: 15px 20px;
+  border-radius: var(--RadiusM);
+  padding: var(--SpacingM) var(--SpacingL);
   margin: 1vw;
   width: 90%;
-  font-size: 1em;
+  font-size: var(--FontM);
 }
 
 input:focus,
@@ -22,7 +22,11 @@ select:focus {
   margin: 1vw;
   margin-left: 0;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--RadiusM);
   width: 10%;
   padding: 0;
+  background: var(--T3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

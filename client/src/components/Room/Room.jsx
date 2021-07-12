@@ -27,14 +27,15 @@ const Room = (props) => {
 
   useEffect(() => {
     if (!socketRef.current || name === "") {
+      //safety check for name and socket.
       props.history.push("/");
       return;
     }
 
-    if (name !== "") {
-      joinVideoChat();
-    }
+    // join the video chat.
+    joinVideoChat();
 
+    // on before unload, notify the user that video call will be ended.
     window.onbeforeunload = (event) => {
       const e = event || window.event;
       e.preventDefault();
@@ -44,6 +45,7 @@ const Room = (props) => {
       return "";
     };
 
+    // dialog for on back event of the browser.
     const onBackButtonEvent = (e) => {
       e.preventDefault();
       if (
@@ -67,13 +69,14 @@ const Room = (props) => {
     };
   }, []);
 
+  // toggle drawer function.
   function toggleDrawer() {
     setDrawerOpen(!drawerOpen);
   }
 
   return (
     <div className="room">
-      <Header />
+      <Header props={props} home={false} />
       <div className="room__view">
         <ChatDrawer
           className="chat__drawer"
@@ -87,14 +90,18 @@ const Room = (props) => {
           <UserVideo showButtons={false} />
         </div>
         {peers.length === 0 ? (
-          <div className="room__empty">
+          // empty room, show empty image and text.
+          <div className="room__empty height100">
             <img alt="failed to load" src={String(logo)} />
             <p style={{ marginTop: "30px", fontSize: "1.25em" }}>
               There's no one here...
             </p>
           </div>
         ) : (
-          <div className={"room__videoGrid type" + peers.length}>
+          // load participants video in grid.
+          <div
+            className={"room__videoGrid height100 width100 type" + peers.length}
+          >
             {peers.map((peer) => {
               return (
                 <div key={peer.peerID} className="room__gridItem">

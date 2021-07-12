@@ -13,9 +13,9 @@ function Home() {
   return (
     <div>
       {/* <Info /> */}
-      <Header />
+      <Header props={null} home={true} />
       <div className="joinRoom">
-        <div className="joinRoom__form">
+        <div className="joinRoom__form width100 height100">
           <div className="joinRoom__image">
             <img alt="error not found" height="100%" src={String(logo)} />
           </div>
@@ -29,13 +29,12 @@ function Home() {
             />
             <input
               className="input__field"
-              style={{ marginTop: "10px" }}
               label="Room ID"
               placeholder="Room id"
               value={roomID}
               onChange={(e) => setRoomID(e.target.value)}
             />
-            <div className="joinRoomform__submit">
+            <div className="joinRoomform__submit width100 height100">
               <button
                 onClick={() => {
                   setRoomID(uuidv4());

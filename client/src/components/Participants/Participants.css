@@ -1,6 +1,5 @@
 .participants__container {
   width: 20%;
-  height: 100%;
   background: #faf9f8;
   display: flex;
   flex-direction: column;
@@ -13,8 +12,8 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 12px 20px;
-  font-size: 1.1em;
+  padding: var(--SpacingM) var(--SpacingL);
+  font-size: (--FontL);
   border-bottom: 1px solid #e1dfdd;
   color: var(--TS1);
   background: var(--T3);
@@ -25,6 +24,6 @@
   justify-content: flex-start;
   align-items: center;
   font-weight: normal;
-  padding: 15px 30px;
-  font-size: 1em;
+  padding: var(--SpacingM) 30px;
+  font-size: var(--FontM);
 }

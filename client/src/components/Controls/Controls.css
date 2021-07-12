@@ -1,6 +1,5 @@
 .control {
   overflow-y: hidden;
-  width: 100%;
   position: absolute;
   bottom: 0;
   display: flex;
@@ -10,15 +9,16 @@
   color: var(--T4);
   height: calc(7vh - 5px);
   z-index: 10;
-  border-top: 5px solid var(--P);
+  width: 100%;
+  border-top: var(--SpacingXS) solid var(--P);
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.178);
 }
 
 .control__button {
-  padding: 5px;
+  padding: var(--SpacingXS);
 }
 
 .control__icon {
-  margin: 20px;
+  margin: var(--SpacingL);
   color: #e2e2f6;
 }

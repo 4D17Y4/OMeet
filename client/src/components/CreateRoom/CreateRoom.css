@@ -1,5 +1,5 @@
 .createRoom {
-  height: 88vh;
+  height: var(--MainWindowHeightL);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,31 +8,10 @@
 }
 
 .userPreview__wrapper {
-  width: 720px;
-  height: 480px;
+  width: var(--PreviewWidth);
+  height: var(--PreviewHeight);
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-}
-
-.createRoom__form {
-  display: flex;
-  position: relative;
-  justify-content: center;
-  height: 100%;
-}
-
-.createRoom__userPreview {
-  position: relative;
-  height: 100%;
-  justify-content: center;
-}
-
-.form__submit {
-  margin-top: 20px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

@@ -9,10 +9,12 @@ function ChatRoom(props) {
 
   useEffect(() => {
     if (!name || name === "") {
+      // check to insure that name was entered.
       props.history.push("/");
       return;
     }
 
+    // notify user before unload.
     window.onbeforeunload = (event) => {
       const e = event || window.event;
       e.preventDefault();
@@ -29,6 +31,7 @@ function ChatRoom(props) {
           "Are you sure ? You will leave the room, you can join as a new member."
         )
       ) {
+        // end call on unload and redirect to home page.
         endCall();
         props.history.push("/");
       } else {
@@ -36,6 +39,7 @@ function ChatRoom(props) {
       }
     };
 
+    // push to history and link the function.
     window.history.pushState(null, null, window.location.pathname);
     window.addEventListener("popstate", onBackButtonEvent);
     return () => {
@@ -46,7 +50,7 @@ function ChatRoom(props) {
 
   return (
     <div>
-      <Header />
+      <Header props={props} home={false} />
       <Chat props={props} />
       <Controls props={props} inVideo={false} />
     </div>

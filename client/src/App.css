@@ -11,6 +11,30 @@
   --T2: #bdbde6;
   --T3: #e2e2f6;
   --T4: #f4f4fc;
+  --MainWindowHeightS: 86vh;
+  --MainWindowHeightL: 88vh;
+  --SpacingL: 20px;
+  --SpacingM: 15px;
+  --SpacingS: 10px;
+  --SpacingXS: 5px;
+  --PreviewHeight: 480px;
+  --PreviewWidth: 720px;
+  --DrawerWidth: 30vw;
+  --RadiusM: 8px;
+  --RadiusS: 4px;
+  --FontL: 1.1em;
+  --FontM: 1em;
+  --FontS: 0.8em;
+  --UserFloatingWidth: 300px;
+  --UserFloatingHeight: 200px;
+}
+
+.width100 {
+  width: 100%;
+}
+
+.height100 {
+  height: 100%;
 }
 
 .backgroundTS2 {

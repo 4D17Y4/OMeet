@@ -269,6 +269,7 @@ const ContextProvider = ({ children }) => {
     setMessages([]);
     setChatUsers([]);
     socketRef.current.emit("leaveRoom");
+    socketRef.current = null;
   }
 
   /**

@@ -24,6 +24,8 @@ function Controls({ props, inVideo, toggleDrawer }) {
   } = useContext(SocketContext);
 
   function leaveVideoCall(event) {
+    // leave video call notification.
+
     event.preventDefault();
     if (
       window.confirm(
@@ -36,6 +38,8 @@ function Controls({ props, inVideo, toggleDrawer }) {
   }
 
   function leaveCall(event) {
+    // leave room notification.
+
     event.preventDefault();
     if (window.confirm("Are you sure ? You will leave the room.")) {
       endCall();
@@ -45,6 +49,7 @@ function Controls({ props, inVideo, toggleDrawer }) {
 
   if (inVideo) {
     return (
+      // the control buttons if the user is in video call.
       <div className="control">
         <div className="control__button">
           <IconButton onClick={toggleDrawer}>
@@ -78,6 +83,7 @@ function Controls({ props, inVideo, toggleDrawer }) {
     );
   } else {
     return (
+      // control button if the user is not in video call, ie just in chat room.
       <div className="control">
         <div className="control__button">
           <Link style={{ textDecoration: "none" }} to={`/preview`}>

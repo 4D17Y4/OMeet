@@ -3,8 +3,11 @@ import ReactEmoji from "react-emoji";
 import "./ChatMessage.css";
 
 function ChatMessage({ message, name }) {
+  // used to differentiate between the users message and other messages.
   let myMessage = false;
+
   if (name === message.user) {
+    // if this is users message, we need to show it in different ui pattern.
     myMessage = true;
   }
 
@@ -20,7 +23,7 @@ function ChatMessage({ message, name }) {
             {message.time}
           </p>
         </div>
-        <p className="message__text colorDark">
+        <p className="message__text width100 colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
       </div>

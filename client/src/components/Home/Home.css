@@ -1,7 +1,6 @@
 .joinRoom {
   margin: 0;
-  height: 88vh;
-  width: 100%;
+  height: var(--MainWindowHeightL);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,13 +14,10 @@
   flex-direction: column;
   align-items: center;
   flex-grow: space-between;
-  height: 100%;
-  width: 100%;
 }
 
 .joinRoomform__submit {
-  margin-top: 20px;
-  width: 100%;
+  margin-top: var(--SpacingL);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -36,18 +32,19 @@
   width: 150px;
   background: var(--P);
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--RadiusS);
   color: var(--T4);
 }
 
 .input__field {
   background: var(--T3);
   border: 0;
-  border-radius: 4px;
-  padding: 10px 20px;
-  margin: 10px 0;
+  border-radius: var(--RadiusS);
+  padding: var(--SpacingS) var(--SpacingL);
+  margin: var(--SpacingS) 0;
+  margin-top: var(--SpacingS);
   width: calc(100% - 40px);
-  font-size: 1em;
+  font-size: var(--FontM);
   font-weight: normal;
 }
 
@@ -67,6 +64,6 @@
   height: calc(5vh - 5px);
   z-index: 10;
   background: var(--P);
-  border-top: 5px solid var(--T2);
+  border-top: var(--SpacingXS) solid var(--T2);
   box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.178);
 }

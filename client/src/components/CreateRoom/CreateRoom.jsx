@@ -10,11 +10,15 @@ function CreateRoom(props) {
 
   useEffect(() => {
     if (!socketRef.current) {
+      // null check for socket ref.
       props.history.push("/");
       return;
     }
+
+    // initialise user preview.
     initUserPreview();
 
+    // warning on unload, ie refresh.
     window.onbeforeunload = (event) => {
       const e = event || window.event;
       e.preventDefault();
@@ -24,6 +28,7 @@ function CreateRoom(props) {
       return "";
     };
 
+    // back button event of the browser.
     const onBackButtonEvent = (e) => {
       e.preventDefault();
       if (userPreview.current) {
@@ -44,7 +49,7 @@ function CreateRoom(props) {
 
   return (
     <div className="view">
-      <Header />
+      <Header props={props} home={false} />
       <div className="createRoom">
         <div className="userPreview__wrapper">
           <UserVideo showButtons={true} />

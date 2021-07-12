@@ -17,9 +17,13 @@ function Chat() {
   } = useContext(SocketContext);
 
   useEffect(() => {
-    console.log(socketRef, name, roomID);
-    if (name !== "") {
+    if (!socketRef.current && name !== "") {
+      //saftey check so that no user with a empty name joins the room.
+
+      // join the room, inits socket.
       joinRoom();
+
+      // join the chat room, the user joins the chat room.
       joinChatRoom();
     }
   }, [name]);
@@ -27,7 +31,7 @@ function Chat() {
   return (
     <div className="chat">
       <Participants users={chatUsers} room={roomID} />
-      <div className="chat__container">
+      <div className="chat__container height100">
         <ChatMessages messages={messages} name={name} />
         <ChatInput />
       </div>

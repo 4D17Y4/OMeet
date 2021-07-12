@@ -1,7 +1,7 @@
-.Drawer__Container {
+.drawer__Container {
   display: flex;
-  height: 86vh;
-  width: 30vw;
+  height: var(--MainWindowHeightS);
+  width: var(--DrawerWidth);
   flex-direction: column;
   justify-content: space-between;
   background: #faf9f8;
@@ -12,21 +12,21 @@
   z-index: 1;
 }
 
-.Drawer__Container--isOpen {
+.drawer__Container--isOpen {
   transform: translate(0);
 }
 
-.Drawer__roomName {
+.drawer__roomName {
   margin-top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  font-size: 1.1em;
+  padding: var(--SpacingL);
+  font-size: var(--FontL);
   background: var(--T3);
 }
 
-.Drawer__closeIcon {
+.drawer__closeIcon {
   position: absolute;
-  right: 20px;
+  right: var(--SpacingL);
 }

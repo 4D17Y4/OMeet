@@ -8,15 +8,15 @@ import IconButton from "@material-ui/core/IconButton";
 function ChatDrawer({ drawerOpen, toggleDrawer, name, messages, room }) {
   return (
     <div
-      className={`Drawer__Container ${
-        drawerOpen ? "Drawer__Container--isOpen" : ""
+      className={`drawer__Container ${
+        drawerOpen ? "drawer__Container--isOpen" : ""
       }`}
     >
-      <div className="Drawer__roomName">
+      <div className="drawer__roomName">
         {room}
         <IconButton
           onClick={toggleDrawer}
-          className="Drawer__closeIcon"
+          className="drawer__closeIcon"
           style={{ position: "absolute" }}
         >
           <CloseIcon className="control__button" fontSize="large" />

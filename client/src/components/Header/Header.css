@@ -11,7 +11,7 @@
 .header__name {
   font-weight: bold;
   object-fit: contain;
-  font-size: 25px;
+  font-size: 1.5em;
 }
 
 .header__icon {

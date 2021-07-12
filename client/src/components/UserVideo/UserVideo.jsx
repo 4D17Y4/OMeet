@@ -34,55 +34,53 @@ function UserVideo(props) {
   } = useContext(SocketContext);
 
   return (
-    <div className="userFloating">
-      <div className="videoFrame">
-        <video muted className="videoFrame__video" ref={userPreview} autoPlay />
-        {props.showButtons ? (
-          <div className="videoFrame__buttonContainer">
-            {/* <IconButton> */}
-            <div className="button__container">
-              <div className="toggle__container">
-                {audioState ? (
-                  <MicRoundedIcon onClick={audioToggle} />
-                ) : (
-                  <MicOffRoundedIcon onClick={audioToggle} />
-                )}
-                <PurpleSwitch
-                  checked={audioState}
-                  onChange={audioToggle}
-                  name="checkedC"
-                />
-              </div>
-              <div className="toggle__container">
-                {/* </IconButton> */}
-                {videoState ? (
-                  <VideocamRoundedIcon onClick={videoToggle} />
-                ) : (
-                  <VideocamOffRoundedIcon onClick={videoToggle} />
-                )}
-                <PurpleSwitch
-                  checked={videoState}
-                  onChange={videoToggle}
-                  name="checkedC"
-                />
-              </div>
+    <div className="videoFrame width100 height100">
+      <video
+        muted
+        className="videoFrame__video width100 height100"
+        ref={userPreview}
+        autoPlay
+      />
+      {props.showButtons ? (
+        // check if we have to show buttons.
+        <div className="videoFrame__buttonContainer width100">
+          <div className="button__container">
+            <div className="toggle__container">
+              {audioState ? (
+                <MicRoundedIcon onClick={audioToggle} />
+              ) : (
+                <MicOffRoundedIcon onClick={audioToggle} />
+              )}
+              <PurpleSwitch
+                checked={audioState}
+                onChange={audioToggle}
+                name="checkedC"
+              />
             </div>
-            <Link
-              style={{ height: "40px" }}
-              to={{
-                pathname: `/room/${roomID}`,
-              }}
-            >
-              <button
-                style={{ position: "absolute", right: "5px" }}
-                className="joinRoom__button"
-              >
-                Join
-              </button>
-            </Link>
+            <div className="toggle__container">
+              {/* </IconButton> */}
+              {videoState ? (
+                <VideocamRoundedIcon onClick={videoToggle} />
+              ) : (
+                <VideocamOffRoundedIcon onClick={videoToggle} />
+              )}
+              <PurpleSwitch
+                checked={videoState}
+                onChange={videoToggle}
+                name="checkedC"
+              />
+            </div>
           </div>
-        ) : null}
-      </div>
+          <Link
+            style={{ height: "40px" }}
+            to={{
+              pathname: `/room/${roomID}`,
+            }}
+          >
+            <button className="joinRoom__button enterRoom__button">Join</button>
+          </Link>
+        </div>
+      ) : null}
     </div>
   );
 }

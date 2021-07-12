@@ -36,10 +36,6 @@ function ParticipantVideo(props, key) {
       }
     });
 
-    props.peer.on("name", (name) => {
-      setNameState(name);
-    });
-
     /**
      * Update the user stream status.
      */
@@ -55,11 +51,12 @@ function ParticipantVideo(props, key) {
   }, [props.peer, videoState]);
 
   return (
-    <div className={"videoContainer " + className}>
-      <video playsInline autoPlay ref={ref} className="videoContainer__video" />
+    <div className={"height100 width100 videoContainer " + className}>
+      <video playsInline autoPlay ref={ref} className="width100 height100" />
       <div className="videoContainer__user">
         <div className="videoContainer__info">
           <h2>{name}</h2>
+          {/* change accent color depending on the current status of the participant. */}
           {connecting ? (
             <div className="videoContainer__info--connecting" />
           ) : audioState ? (
