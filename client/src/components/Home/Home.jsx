@@ -12,13 +12,17 @@ function Home() {
 
   return (
     <div>
-      {/* <Info /> */}
+      {/* Header */}
       <Header props={null} home={true} />
+
+      {/* Join room */}
       <div className="joinRoom">
         <div className="joinRoom__form width100 height100">
           <div className="joinRoom__image">
             <img alt="error not found" height="100%" src={String(logo)} />
           </div>
+
+          {/* Input form */}
           <div className="joinRoomform__wrapper">
             <input
               className="input__field"
@@ -58,6 +62,8 @@ function Home() {
           </div>
         </div>
       </div>
+
+      {/* Empty footer */}
       <div className="bottom__empty" />
     </div>
   );

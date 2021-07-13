@@ -2,6 +2,8 @@ import React, { createContext, useRef, useState } from "react";
 import io from "socket.io-client";
 import Peer from "simple-peer";
 
+//---------------------------------------------------------------- Create Context.
+
 const SocketContext = createContext();
 
 /**
@@ -16,14 +18,16 @@ const ContextProvider = ({ children }) => {
   const [roomID, setRoomID] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [chatUsers, setChatUsers] = useState([]);
   const [userStream, setUserStream] = useState();
   const [videoState, setVideoState] = useState(true);
   const [audioState, setAudioState] = useState(true);
-  const [chatUsers, setChatUsers] = useState([]);
 
   const socketRef = useRef();
   const peersRef = useRef([]);
   const userPreview = useRef();
+
+  //---------------------------------------------------------------- Toggle Streams.
 
   /**
    * toggles given track (helper function for audio and video toggle.)
@@ -36,24 +40,17 @@ const ContextProvider = ({ children }) => {
   }
 
   /**
-   * Sends the updates to the participant that the video is switched off.
-   */
-  function sendUpdate(video, audio) {
-    if (socketRef.current)
-      socketRef.current.emit("user updated", {
-        videoEnabled: video,
-        audioEnabled: audio,
-        roomId: roomID,
-      });
-  }
-
-  /**
    * Toggle the video
    * Disables the user video stream and sends the update signal.
    */
   function videoToggle() {
+    // set video state.
     setVideoState(!videoState);
+
+    // toggle the video track.
     toggleTracks(userStream.getVideoTracks());
+
+    // send update to all user, to update the status.
     sendUpdate(!videoState, audioState);
   }
 
@@ -62,18 +59,31 @@ const ContextProvider = ({ children }) => {
    * Disables the user auido stream and sends the update signal.
    */
   function audioToggle() {
+    // set audio state.
     setAudioState(!audioState);
+
+    // toggle the audio track.
     toggleTracks(userStream.getAudioTracks());
+
+    // send update to all user, to update the status.
     sendUpdate(videoState, !audioState);
   }
 
   /**
-   * Join Room, initialises the socket and room.
+   * Sends the updates to the participant that the video is switched off.
    */
-  function joinRoom() {
-    initSocket();
-    initRoom();
+  function sendUpdate(video, audio) {
+    if (socketRef.current) {
+      // null check for socketRef
+      socketRef.current.emit("user updated", {
+        videoEnabled: video,
+        audioEnabled: audio,
+        roomId: roomID,
+      });
+    }
   }
+
+  //---------------------------------------------------------------- Initialising room
 
   /**
    * Connect socket, setup id and socket.
@@ -85,68 +95,29 @@ const ContextProvider = ({ children }) => {
   }
 
   /**
-   * Join chat room with name and room
-   */
-  function joinChatRoom() {
-    socketRef.current.emit("join chat", { name, room: roomID });
-  }
-
-  /**
-   * Send chat message inside the room.
-   * @param {*} message
-   */
-  function sendMessage(message) {
-    socketRef.current.emit("sendMessage", message, () => setMessage(""));
-  }
-
-  /**
-   * Join room
-   */
-  function joinVideoChat() {
-    userPreview.current.srcObject = userStream;
-    socketRef.current.emit("join room", {
-      roomID,
-      name,
-      videoState,
-      audioState,
-    });
-  }
-
-  /**
-   * Initailises the user preview for the video call.
-   */
-  const initUserPreview = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { aspectRatio: 1.5 },
-      audio: audioState,
-    });
-
-    const constraints = {};
-    stream.getVideoTracks()[0].applyConstraints(constraints);
-
-    setUserStream(stream);
-
-    userPreview.current.srcObject = stream;
-  };
-
-  /**
    * SetUp the room.
    */
   function initRoom() {
+    // update the messages array on message recieve.
     socketRef.current.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
 
+    // update participants on with room data.
+    // - users (All the users in room).
     socketRef.current.on("roomData", (users) => {
       setChatUsers(users);
     });
 
+    // update video participants with all users data
+    // - users (All the users in video conference).
     socketRef.current.on("all users", (users) => {
       // set up a new temporary peers array.
       const peers = [];
 
       // for every user create a new peer. (Mesh)
       users.forEach((user) => {
+        // create a new peer ( initiator. )
         const peer = createPeer(user.id);
         peersRef.current.push({
           peerID: user.id,
@@ -156,6 +127,7 @@ const ContextProvider = ({ children }) => {
           peer,
         });
 
+        // add it to the peers array
         peers.push({
           peerID: user.id,
           name: user.name,
@@ -164,11 +136,14 @@ const ContextProvider = ({ children }) => {
           peer,
         });
       });
+
+      // update global peers.
       setPeers(peers);
     });
 
     // for each user joined we add a new peer. (Mesh)
     socketRef.current.on("user joined", (payload) => {
+      // add a peer.
       const peer = addPeer(
         payload.signal,
         payload.callerID,
@@ -178,6 +153,7 @@ const ContextProvider = ({ children }) => {
         payload.audioState
       );
 
+      // update peers ref.
       peersRef.current.push({
         name: payload.name,
         peerID: payload.callerID,
@@ -186,10 +162,12 @@ const ContextProvider = ({ children }) => {
         peer,
       });
 
+      // update peers array.
       setPeers([...peersRef.current]);
     });
 
     // send update to the socket.
+    // -payload (users data)
     socketRef.current.on("update user stream", (payload) => {
       const item = peersRef.current.find((p) => p.peerID === payload.callerID);
       if (item) {
@@ -224,7 +202,6 @@ const ContextProvider = ({ children }) => {
   }
 
   /**
-   *
    * @param {*} userToSignal end user to connect to on joining room.
    * @returns
    */
@@ -247,33 +224,6 @@ const ContextProvider = ({ children }) => {
   }
 
   /**
-   * Cleanup function on video call end.
-   */
-  function endVideoCall() {
-    setPeers([]);
-    userStream.getAudioTracks().forEach((track) => {
-      track.stop();
-    });
-    userStream.getVideoTracks().forEach((track) => {
-      track.stop();
-    });
-    setAudioState(true);
-    setVideoState(true);
-    socketRef.current.emit("videoCallEnded");
-  }
-
-  /**
-   * End the call ie leave the room.
-   */
-  function endCall() {
-    setMessages([]);
-    setChatUsers([]);
-    socketRef.current.emit("leaveRoom");
-    socketRef.current = null;
-  }
-
-  /**
-   *
    * @param {*} incomingSignal new user's signal
    * @param {*} callerID new user's id.
    * @param {*} stream new user's stream
@@ -306,6 +256,89 @@ const ContextProvider = ({ children }) => {
 
     peer.signal(incomingSignal);
     return peer;
+  }
+
+  //---------------------------------------------------------------- Init User Preview
+
+  /**
+   * Initailises the user preview for the video call.
+   */
+  const initUserPreview = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { aspectRatio: 1.5 },
+      audio: audioState,
+    });
+
+    const constraints = {};
+    stream.getVideoTracks()[0].applyConstraints(constraints);
+
+    setUserStream(stream);
+
+    userPreview.current.srcObject = stream;
+  };
+
+  //---------------------------------------------------------------- Room Helper functions.
+
+  /**
+   * Join Room, initialises the socket and room.
+   */
+  function joinRoom() {
+    initSocket();
+    initRoom();
+  }
+
+  /**
+   * Join chat room with name and room
+   */
+  function joinChatRoom() {
+    socketRef.current.emit("join chat", { name, room: roomID });
+  }
+
+  /**
+   * Send chat message inside the room.
+   * @param {*} message
+   */
+  function sendMessage(message) {
+    socketRef.current.emit("sendMessage", message, () => setMessage(""));
+  }
+
+  /**
+   * Join room
+   */
+  function joinVideoChat() {
+    userPreview.current.srcObject = userStream;
+    socketRef.current.emit("join room", {
+      roomID,
+      name,
+      videoState,
+      audioState,
+    });
+  }
+
+  /**
+   * Cleanup function on video call end.
+   */
+  function endVideoCall() {
+    setPeers([]);
+    userStream.getAudioTracks().forEach((track) => {
+      track.stop();
+    });
+    userStream.getVideoTracks().forEach((track) => {
+      track.stop();
+    });
+    setAudioState(true);
+    setVideoState(true);
+    socketRef.current.emit("videoCallEnded");
+  }
+
+  /**
+   * End the call ie leave the room.
+   */
+  function endCall() {
+    setMessages([]);
+    setChatUsers([]);
+    socketRef.current.emit("leaveRoom");
+    socketRef.current = null;
   }
 
   return (

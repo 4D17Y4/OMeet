@@ -52,7 +52,10 @@ function ParticipantVideo(props, key) {
 
   return (
     <div className={"height100 width100 videoContainer " + className}>
+      {/* Participants video */}
       <video playsInline autoPlay ref={ref} className="width100 height100" />
+
+      {/* Participants status */}
       <div className="videoContainer__user">
         <div className="videoContainer__info">
           <h2>{name}</h2>

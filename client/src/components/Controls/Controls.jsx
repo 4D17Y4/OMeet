@@ -51,11 +51,14 @@ function Controls({ props, inVideo, toggleDrawer }) {
     return (
       // the control buttons if the user is in video call.
       <div className="control">
+        {/* Toggle Chat */}
         <div className="control__button">
           <IconButton onClick={toggleDrawer}>
             <ForumIcon className="control__icon" />
           </IconButton>
         </div>
+
+        {/* Audio toggle */}
         <div className="control__button">
           <IconButton onClick={audioToggle}>
             {audioState ? (
@@ -65,6 +68,8 @@ function Controls({ props, inVideo, toggleDrawer }) {
             )}
           </IconButton>
         </div>
+
+        {/* Video Toggle */}
         <div className="control__button">
           <IconButton onClick={videoToggle}>
             {videoState ? (
@@ -74,6 +79,8 @@ function Controls({ props, inVideo, toggleDrawer }) {
             )}
           </IconButton>
         </div>
+
+        {/* End Call button */}
         <div className="control__button">
           <IconButton onClick={leaveVideoCall}>
             <CallEndIcon className="control__icon" />
@@ -85,6 +92,7 @@ function Controls({ props, inVideo, toggleDrawer }) {
     return (
       // control button if the user is not in video call, ie just in chat room.
       <div className="control">
+        {/* Join conference */}
         <div className="control__button">
           <Link style={{ textDecoration: "none" }} to={`/preview`}>
             <IconButton>
@@ -92,6 +100,8 @@ function Controls({ props, inVideo, toggleDrawer }) {
             </IconButton>
           </Link>
         </div>
+
+        {/* Leave Room */}
         <div className="control__button">
           <IconButton onClick={leaveCall}>
             <ExitToAppIcon className="control__icon" />

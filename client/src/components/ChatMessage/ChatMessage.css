@@ -10,7 +10,7 @@
 .message__text {
   letter-spacing: 0;
   float: left;
-  font-size: var(--FontM);
+  font-size: 0.9em;
   margin: 0;
   padding-top: var(--SpacingXS);
   word-wrap: break-word;

@@ -9,7 +9,7 @@ import Switch from "@material-ui/core/Switch";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 
-const PurpleSwitch = withStyles({
+const TeamsSwitch = withStyles({
   switchBase: {
     color: "var(--T2)",
     "&$checked": {
@@ -35,6 +35,7 @@ function UserVideo(props) {
 
   return (
     <div className="videoFrame width100 height100">
+      {/* User preview */}
       <video
         muted
         className="videoFrame__video width100 height100"
@@ -45,32 +46,34 @@ function UserVideo(props) {
         // check if we have to show buttons.
         <div className="videoFrame__buttonContainer width100">
           <div className="button__container">
+            {/* Audio toggle */}
             <div className="toggle__container">
               {audioState ? (
                 <MicRoundedIcon onClick={audioToggle} />
               ) : (
                 <MicOffRoundedIcon onClick={audioToggle} />
               )}
-              <PurpleSwitch
+              <TeamsSwitch
                 checked={audioState}
                 onChange={audioToggle}
                 name="checkedC"
               />
             </div>
+            {/* Video toggle */}
             <div className="toggle__container">
-              {/* </IconButton> */}
               {videoState ? (
                 <VideocamRoundedIcon onClick={videoToggle} />
               ) : (
                 <VideocamOffRoundedIcon onClick={videoToggle} />
               )}
-              <PurpleSwitch
+              <TeamsSwitch
                 checked={videoState}
                 onChange={videoToggle}
                 name="checkedC"
               />
             </div>
           </div>
+          {/* Join button */}
           <Link
             style={{ height: "40px" }}
             to={{

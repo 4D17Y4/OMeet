@@ -12,6 +12,7 @@ function ChatDrawer({ drawerOpen, toggleDrawer, name, messages, room }) {
         drawerOpen ? "drawer__Container--isOpen" : ""
       }`}
     >
+      {/* Drawer Head */}
       <div className="drawer__roomName">
         {room}
         <IconButton
@@ -22,6 +23,8 @@ function ChatDrawer({ drawerOpen, toggleDrawer, name, messages, room }) {
           <CloseIcon className="control__button" fontSize="large" />
         </IconButton>
       </div>
+
+      {/* Chat Area */}
       <ChatMessages messages={messages} name={name} />
       <ChatInput />
     </div>

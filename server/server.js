@@ -1,4 +1,8 @@
 require("dotenv").config();
+
+/**
+ * Set up the server.
+ */
 const express = require("express");
 const http = require("http");
 const router = require("./router");
@@ -17,6 +21,9 @@ const io = socket(server, {
 app.use(cors());
 app.use(router);
 
+//---------------------------------------------------------------- Helper functions
+
+// Chat user function
 const {
   addChatUser,
   removeChatUser,
@@ -24,6 +31,7 @@ const {
   getChatUsersInRoom,
 } = require("./chatUsers.js");
 
+// Video user function
 const {
   addVideoUser,
   removeVideoUser,
@@ -32,7 +40,7 @@ const {
   getVideoParticipantsInRoom,
 } = require("./videoUsers.js");
 
-// returns the current time in day HH:MM format.
+// Current time in specific format (day HH:MM) (12 hour format)
 function getTime() {
   const date = new Date();
   var hours = date.getHours();
@@ -52,7 +60,8 @@ function getTime() {
   return strTime;
 }
 
-// On socket connction.
+//---------------------------------------------------------------- On socket connction.
+
 io.on("connection", (socket) => {
   /**
    * On join chat.
@@ -60,17 +69,18 @@ io.on("connection", (socket) => {
    * Emit a welcome message to the user.
    * Notify the users in the room that the user has joined the room.
    * Join room and send the room data (participants) to the user.
-   *
    */
+
   socket.on("join chat", (payload) => {
-    // add user
-    console.log("join chat", payload);
+    // add user (Chat user is the returned added user)
     const { error, chatUser } = addChatUser({
       id: socket.id,
       name: payload.name,
       room: payload.room,
     });
+
     if (error) {
+      // the user already exist or the entries are invalid.
       return;
     }
 
@@ -95,14 +105,21 @@ io.on("connection", (socket) => {
 
   /**
    * On sending message find the user from socket and emit the message to specific room.
+   * - message ( text message from the user ).
+   * - callaback ( any callback from the function ).
    */
   socket.on("sendMessage", (message, callback) => {
+    // get chat user
     const chatUser = getChatUser(socket.id);
+
+    // emit the message
     io.to(chatUser.room).emit("message", {
       user: chatUser.name,
       text: message,
       time: getTime(),
     });
+
+    // callback if any
     callback();
   });
 
@@ -119,6 +136,7 @@ io.on("connection", (socket) => {
    *
    */
   socket.on("join room", (payload) => {
+    // Add video user to the conference.
     const { error, videoUser } = addVideoUser({
       id: socket.id,
       name: payload.name,
@@ -128,15 +146,18 @@ io.on("connection", (socket) => {
     });
 
     if (error) {
+      // the user already exist or the entries are invalid.
       return;
     }
 
+    // Broadcast a message that the user has joined the video call.
     socket.broadcast.to(videoUser.room).emit("message", {
       user: "Admin",
       text: `${videoUser.name} joined the video call`,
       time: getTime(),
     });
 
+    // Get the video users data to the newly joined user.
     socket.emit(
       "all users",
       getVideoParticipantsInRoom(payload.roomID, socket.id)
@@ -155,7 +176,10 @@ io.on("connection", (socket) => {
    * Get the user's room and send the signal to the user to signal.
    */
   socket.on("sending signal", (payload) => {
+    // get video user.
     const user = getVideoUser(payload.callerID);
+
+    // emit "user joined" with the recieved signal.
     io.to(payload.userToSignal).emit("user joined", {
       signal: payload.signal,
       callerID: payload.callerID,
@@ -173,6 +197,7 @@ io.on("connection", (socket) => {
    * Send the returning signal to the client.
    */
   socket.on("returning signal", (payload) => {
+    // send the signal to the client.
     io.to(payload.callerID).emit("receiving returned signal", {
       signal: payload.signal,
       id: socket.id,
@@ -222,12 +247,17 @@ io.on("connection", (socket) => {
    *
    */
   function endVideoCall() {
-    const userRemoved = removeVideoUser(socket.id);
+    // remove the user
+    const userRemoved = removeVideoUser(socket.id); // gets the user removed.
     if (userRemoved) {
+      // if user was succesfully removed.
+
+      // broadcast that the user left.
       socket.broadcast
         .to(userRemoved.room)
         .emit("user left", socket.id.toString());
 
+      // emit admin message to notify all participants.
       io.to(userRemoved.room).emit("message", {
         user: "Admin",
         text: `${userRemoved.name} left the video call`,
@@ -252,19 +282,26 @@ io.on("connection", (socket) => {
    *
    */
   function leaveRoom() {
+    // remove the user from chat room.
     const userRemoved = removeChatUser(socket.id);
     if (userRemoved) {
+      // if the user was succesfully removed.
+
+      // emit an admin message that the user left the room.
       socket.broadcast.to(userRemoved.room).emit("message", {
         user: "Admin",
         text: `${userRemoved.name} left the room`,
         time: getTime(),
       });
+
+      // update the particiapants data in the room.
       io.to(userRemoved.room).emit(
         "roomData",
         getChatUsersInRoom(userRemoved.room)
       );
+
+      // leave the room;
       socket.leave(userRemoved.room);
-      console.log("left");
     }
   }
 
@@ -275,7 +312,10 @@ io.on("connection", (socket) => {
    * Leave the room.
    */
   socket.on("disconnect", () => {
+    // clean user from the client side.
     socket.emit("cleanUser");
+
+    // leave video call and room.
     endVideoCall();
     leaveRoom();
   });

@@ -28,12 +28,17 @@ function Header({ props, home }) {
 
   return (
     <div className="header backgroundP colorT3">
+      {/* Home button */}
       <IconButton onClick={toggleHome}>
         <Icon iconName="HomeSolid" fontSize="large" className="header__icon" />
       </IconButton>
+
+      {/* Header Name */}
       <div className="header__name">
         <p align="center">OMeet</p>
       </div>
+
+      {/* Info Icon */}
       <IconButton onClick={toggleInfo}>
         <Icon iconName="InfoSolid" fontSize="large" className="header__icon" />
       </IconButton>

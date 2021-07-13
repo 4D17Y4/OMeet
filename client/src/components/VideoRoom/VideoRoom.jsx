@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./Room.css";
+import "./VideoRoom.css";
 import ParticipantVideo from "../ParticipantsVideo/ParticipantVideo";
 import UserVideo from "../UserVideo/UserVideo";
 import Controls from "../Controls/Controls";
@@ -76,7 +76,10 @@ const Room = (props) => {
 
   return (
     <div className="room">
+      {/* Header */}
       <Header props={props} home={false} />
+
+      {/* Conference Room */}
       <div className="room__view">
         <ChatDrawer
           className="chat__drawer"

@@ -30,9 +30,15 @@ function Chat() {
 
   return (
     <div className="chat">
+      {/* Participants section */}
       <Participants users={chatUsers} room={roomID} />
+
+      {/* Chat section */}
       <div className="chat__container height100">
+        {/* Messages */}
         <ChatMessages messages={messages} name={name} />
+
+        {/* Chat Input */}
         <ChatInput />
       </div>
     </div>

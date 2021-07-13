@@ -5,6 +5,7 @@ import "./ChatMessages.css";
 function ChatMessages({ messages, name }) {
   return (
     <ScrollToBottom className="messages__container">
+      {/* List of messages */}
       {messages.map((message, i) => {
         return (
           <div key={i}>

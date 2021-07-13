@@ -50,8 +50,13 @@ function ChatRoom(props) {
 
   return (
     <div>
+      {/* Header */}
       <Header props={props} home={false} />
+
+      {/* Chat Area */}
       <Chat props={props} />
+
+      {/* Bottom Control Panel */}
       <Controls props={props} inVideo={false} />
     </div>
   );

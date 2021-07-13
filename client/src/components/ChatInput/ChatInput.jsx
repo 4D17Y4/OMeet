@@ -17,6 +17,7 @@ function ChatInput() {
 
   return (
     <form className="chatInput">
+      {/* Text Area */}
       <input
         className="chatInput__message"
         type="text"
@@ -25,6 +26,8 @@ function ChatInput() {
         onChange={({ target: { value } }) => setMessage(value)}
         onKeyPress={(event) => (event.key === "Enter" ? send(event) : null)}
       />
+
+      {/* Send Button */}
       <div className="chatInput__send">
         <IconButton onClick={(e) => send(e)}>
           <Icon iconName="Send" />

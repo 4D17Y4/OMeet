@@ -49,12 +49,17 @@ function CreateRoom(props) {
 
   return (
     <div className="view">
+      {/* Header */}
       <Header props={props} home={false} />
+
+      {/* User Preview */}
       <div className="createRoom">
         <div className="userPreview__wrapper">
           <UserVideo showButtons={true} />
         </div>
       </div>
+
+      {/* Empty footer */}
       <div className="bottom__empty" />
     </div>
   );

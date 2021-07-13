@@ -12,8 +12,10 @@ function ChatMessage({ message, name }) {
   }
 
   return myMessage ? (
+    // Users messages
     <div className="message justifyEnd">
       <div className="message__container backgroundT3">
+        {/* Message Head */}
         <div className="message__head">
           <p className="head__text pr-10">{message.user}</p>
           <p
@@ -23,14 +25,18 @@ function ChatMessage({ message, name }) {
             {message.time}
           </p>
         </div>
+
+        {/* Message text */}
         <p className="message__text width100 colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
       </div>
     </div>
   ) : (
+    // Participants Message.
     <div className="message justifyStart">
       <div className="message__container backgroundWhite">
+        {/* Message Head */}
         <div className="message__head">
           <p className="head__text pr-10">{message.user}</p>
           <p
@@ -40,6 +46,8 @@ function ChatMessage({ message, name }) {
             {message.time}
           </p>
         </div>
+
+        {/* Message text */}
         <p className="message__text colorDark">
           {ReactEmoji.emojify(message.text)}
         </p>
