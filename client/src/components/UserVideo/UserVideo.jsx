@@ -34,7 +34,7 @@ function UserVideo(props) {
   } = useContext(SocketContext);
 
   return (
-    <div className="videoFrame width100 height100">
+    <div className="videoFrame width100">
       {/* User preview */}
       <video
         muted
@@ -80,7 +80,12 @@ function UserVideo(props) {
               pathname: `/room/${roomID}`,
             }}
           >
-            <button className="joinRoom__button enterRoom__button">Join</button>
+            <button
+              className="enterRoom__button joinRoom__button"
+              style={{ width: "150px", margin: "0" }}
+            >
+              Join
+            </button>
           </Link>
         </div>
       ) : null}

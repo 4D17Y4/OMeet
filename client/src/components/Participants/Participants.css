@@ -1,6 +1,15 @@
+@media only screen and (max-width: 600px) {
+  .participants__container {
+    width: 0%;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .participants__container {
+    width: 20%;
+  }
+}
 .participants__container {
-  width: 20%;
-  background: #faf9f8;
+  background: #e1e1f5;
   display: flex;
   flex-direction: column;
   overflow-y: auto;

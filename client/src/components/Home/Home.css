@@ -10,26 +10,49 @@
 .joinRoom__form {
   display: flex;
   position: relative;
-  justify-content: center;
+  overflow-x: hidden;
+  /* justify-content: center; */
   flex-direction: column;
   align-items: center;
   flex-grow: space-between;
+  overflow-y: scroll;
 }
 
 .joinRoomform__submit {
-  margin-top: var(--SpacingL);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* flex-direction: column; */
+}
+
+@media only screen and (max-width: 600px) {
+  .joinRoomform__submit {
+    flex-direction: column;
+  }
+  .joinRoom_img {
+    height: 300px;
+  }
+}
+
+.joinRoom_img {
+  /* width: 100%;
+  height: 100%; */
+  max-width: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .joinRoom__image {
-  height: 50%;
+  display: flex;
+  align-items: center;
+  height: max(50vh, 200px);
 }
 
 .joinRoom__button {
+  margin-top: var(--SpacingL);
   height: 40px;
-  width: 150px;
+  width: calc(100% - 10px);
+  margin: 5px;
   background: var(--P);
   border: 0;
   border-radius: var(--RadiusS);
@@ -37,11 +60,11 @@
 }
 
 .input__field {
-  background: var(--T3);
+  background: var(--T3b);
   border: 0;
   border-radius: var(--RadiusS);
-  padding: var(--SpacingS) var(--SpacingL);
-  margin: var(--SpacingS) 0;
+  padding: var(--SpacingS) calc(var(--SpacingL) - 5px);
+  margin: var(--SpacingS);
   margin-top: var(--SpacingS);
   width: calc(100% - 40px);
   font-size: var(--FontM);
@@ -61,7 +84,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: calc(5vh - 5px);
+  height: max(calc(5vh - 5px), 20px);
   z-index: 10;
   background: var(--P);
   border-top: var(--SpacingXS) solid var(--T2);

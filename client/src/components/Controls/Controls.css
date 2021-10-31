@@ -7,7 +7,7 @@
   justify-content: center;
   background: var(--P);
   color: var(--T4);
-  height: calc(7vh - 5px);
+  height: max(calc(7vh - 5px), 40px);
   z-index: 10;
   width: 100%;
   border-top: var(--SpacingXS) solid var(--P);

@@ -19,7 +19,11 @@ function Home() {
       <div className="joinRoom">
         <div className="joinRoom__form width100 height100">
           <div className="joinRoom__image">
-            <img alt="error not found" height="100%" src={String(logo)} />
+            <img
+              alt="error not found"
+              className="joinRoom_img"
+              src={String(logo)}
+            />
           </div>
 
           {/* Input form */}
@@ -27,7 +31,7 @@ function Home() {
             <input
               className="input__field"
               label="Name"
-              placeholder="What should we call you"
+              placeholder="Username"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -48,6 +52,7 @@ function Home() {
                 Generate
               </button>
               <Link
+                style={{ width: "100%" }}
                 onClick={(event) =>
                   !name || !roomID ? event.preventDefault() : null
                 }

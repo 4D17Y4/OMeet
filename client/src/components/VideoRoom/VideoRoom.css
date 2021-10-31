@@ -36,7 +36,7 @@
 
 .room__videoWrapper {
   position: absolute;
-  bottom: var(--SpacingL);
+  bottom: 45px;
   right: var(--SpacingL);
   width: var(--UserFloatingWidth);
   height: var(--UserFloatingHeight);

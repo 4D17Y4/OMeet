@@ -4,7 +4,7 @@
   width: var(--DrawerWidth);
   flex-direction: column;
   justify-content: space-between;
-  background: #faf9f8;
+  background: #e0e0ee;
   transition: all 0.3s ease-in-out;
   transform: translate(-30vw);
   position: absolute;

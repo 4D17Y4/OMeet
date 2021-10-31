@@ -36,6 +36,8 @@
 }
 
 .enterRoom__button {
+  width: 150px;
+  margin: 0;
   position: absolute;
   right: var(--SpacingXS);
 }
