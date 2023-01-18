@@ -89,7 +89,7 @@ const ContextProvider = ({ children }) => {
    * Connect socket, setup id and socket.
    */
   function initSocket() {
-    socketRef.current = io("localhost:8000");
+    socketRef.current = io("https://innocent-potato-production.up.railway.app/");
     setId(socketRef.current.id);
     setSocket(socketRef.current);
   }
